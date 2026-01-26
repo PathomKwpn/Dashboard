@@ -1,0 +1,26 @@
+[
+  {
+    "detect_time": "2026-01-15T08:00:00Z",
+    "events": 1200,
+    "avg_24h": 1100,
+    "risk_level": "low"
+  },
+  {
+    "detect_time": "2026-01-15T09:00:00Z",
+    "events": 2523,
+    "avg_24h": 1405,
+    "risk_level": "medium"
+  },
+  {
+    "detect_time": "2026-01-15T10:00:00Z",
+    "events": 3100,
+    "avg_24h": 1500,
+    "risk_level": "medium"
+  },
+  {
+    "detect_time": "2026-01-15T11:00:00Z",
+    "events": 66872,
+    "avg_24h": 1655,
+    "risk_level": "critical"
+  }
+]

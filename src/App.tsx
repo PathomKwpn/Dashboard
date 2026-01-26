@@ -1,21 +1,20 @@
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { fetchEvents } from "@/modules/Events/eventsSlice";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-export default function App() {
-  const dispatch = useAppDispatch();
-  const { list, loading } = useAppSelector((state: any) => state.events);
+import MainLayout from "@/components/layout/MainLayout";
+import { routes } from "@/store/routes";
 
-  useEffect(() => {
-    dispatch(fetchEvents());
-  }, [dispatch]);
-
+function App() {
   return (
-    <div className="p-6">
-      {loading && <p>Loading...</p>}
-      {list.map((e: any) => (
-        <div key={e.id}>{e.message}</div>
-      ))}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<MainLayout />}>
+          {routes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
+
+export default App;
