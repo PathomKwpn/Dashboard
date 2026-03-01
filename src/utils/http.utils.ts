@@ -1,4 +1,4 @@
-export const HeaderDefaults = (options?: { token?: boolean }) => {
+export const getAuthHeaders = (options?: { token?: boolean }) => {
   const headers: Record<string, string> = {};
 
   if (options?.token !== false) {

@@ -1,0 +1,70 @@
+{
+  "kpiMetrics": [
+    {
+      "label": "Total Visits",
+      "value": "2.3M",
+      "change": 10.32,
+      "description": "vs last month"
+    },
+    {
+      "label": "Unique Visitors",
+      "value": "1.6M",
+      "change": -4.8,
+      "description": "vs last month"
+    },
+    {
+      "label": "Pages/Visit",
+      "value": "4.12",
+      "change": -11.8,
+      "description": "vs last month"
+    },
+    {
+      "label": "Traffic Rank",
+      "value": "1,128",
+      "change": 3.21,
+      "description": "vs last month"
+    }
+  ],
+  "salesOverview": [
+    { "month": "Apr 12", "sales": 1200, "revenue": 1100 },
+    { "month": "Apr 13", "sales": 1900, "revenue": 1200 },
+    { "month": "Apr 14", "sales": 1500, "revenue": 1400 },
+    { "month": "Apr 15", "sales": 2200, "revenue": 1800 },
+    { "month": "Apr 16", "sales": 2800, "revenue": 2100 },
+    { "month": "Apr 17", "sales": 3100, "revenue": 2500 },
+    { "month": "Apr 18", "sales": 2500, "revenue": 2800 },
+    { "month": "Apr 19", "sales": 2100, "revenue": 2200 },
+    { "month": "Apr 20", "sales": 1800, "revenue": 1900 },
+    { "month": "Apr 21", "sales": 3200, "revenue": 3100 },
+    { "month": "Apr 22", "sales": 2900, "revenue": 2700 },
+    { "month": "Apr 23", "sales": 2400, "revenue": 2600 }
+  ],
+  "distributionData": [
+    { "name": "Affiliate marketing", "value": 130000 },
+    { "name": "xhrefs alternatives", "value": 110 },
+    { "name": "xhrefs vs seo marketing", "value": 3922 }
+  ],
+  "subscriberData": [
+    { "day": "Apr 12", "active": 4200, "sevenDay": 3800, "thirtyDay": 2100 },
+    { "day": "Apr 13", "active": 4500, "sevenDay": 4100, "thirtyDay": 2300 },
+    { "day": "Apr 14", "active": 4100, "sevenDay": 3900, "thirtyDay": 2200 },
+    { "day": "Apr 15", "active": 5200, "sevenDay": 4800, "thirtyDay": 2800 },
+    { "day": "Apr 16", "active": 4800, "sevenDay": 4400, "thirtyDay": 2500 },
+    { "day": "Apr 17", "active": 5100, "sevenDay": 4700, "thirtyDay": 2700 },
+    { "day": "Apr 18", "active": 4600, "sevenDay": 4200, "thirtyDay": 2400 },
+    { "day": "Apr 19", "active": 4300, "sevenDay": 3900, "thirtyDay": 2100 },
+    { "day": "Apr 20", "active": 6100, "sevenDay": 5500, "thirtyDay": 3200 },
+    { "day": "Apr 21", "active": 5800, "sevenDay": 5200, "thirtyDay": 3000 },
+    { "day": "Apr 22", "active": 5200, "sevenDay": 4800, "thirtyDay": 2800 },
+    { "day": "Apr 23", "active": 4900, "sevenDay": 4400, "thirtyDay": 2600 }
+  ],
+  "integrationData": [
+    { "name": "Affiliate marketing", "type": "Marketing", "volume": 130000, "pkd": 40, "position": 4, "pkdtc": 183773, "cpc": 4.83 },
+    { "name": "xhrefs alternatives", "type": "Tools", "volume": 110, "pkd": 0, "position": 7, "pkdtc": 183773, "cpc": 3.41 },
+    { "name": "xhrefs vs seo marketing", "type": "Comparison", "volume": 3922, "pkd": 0, "position": 12, "pkdtc": 183773, "cpc": 4.83 },
+    { "name": "alternatives tools", "type": "Tools", "volume": 2121, "pkd": 40, "position": 11, "pkdtc": 183773, "cpc": 2.29 },
+    { "name": "seo marketing vs affiliate", "type": "Comparison", "volume": 82, "pkd": 63, "position": 10, "pkdtc": 61.14, "cpc": 1.58 },
+    { "name": "customer acquisition", "type": "Marketing", "volume": 871, "pkd": 9, "position": 15, "pkdtc": 183773, "cpc": 3.81 }
+  ]
+}
+
