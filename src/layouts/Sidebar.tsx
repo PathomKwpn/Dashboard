@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   AlertTriangle,
@@ -6,7 +6,10 @@ import {
   HelpCircle,
   Lock,
   MessageSquare,
+  LogOut,
+  ChevronRight,
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const GENERAL_MENUS = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
@@ -20,6 +23,12 @@ const SUPPORT_MENUS = [
   { label: "Security", to: "/security", icon: Lock },
   { label: "Help", to: "/help", icon: HelpCircle },
 ];
+
+const ROLE_LABELS: Record<string, string> = {
+  admin: "Administrator",
+  business: "Business",
+  user: "User",
+};
 
 const MenuItem = ({ menu }: { menu: (typeof GENERAL_MENUS)[0] }) => (
   <NavLink
@@ -44,15 +53,30 @@ const MenuItem = ({ menu }: { menu: (typeof GENERAL_MENUS)[0] }) => (
   </NavLink>
 );
 
+const getInitials = (name: string) =>
+  name
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n[0]?.toUpperCase() ?? "")
+    .join("");
+
 const Sidebar = () => {
+  const { user, logout, isLoading } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
+
   return (
     <aside className="w-64 bg-background border-r border-border min-h-screen flex flex-col">
       {/* Logo */}
       <div className="flex items-center gap-2 border-b border-border p-4">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
-          N
+          P
         </div>
-        <span className="text-lg font-bold">Nexus</span>
+        <span className="text-lg font-bold">Pathom</span>
       </div>
 
       {/* Navigation */}
@@ -96,18 +120,45 @@ const Sidebar = () => {
 
       {/* Footer */}
       <div className="border-t border-border space-y-2 p-4">
-        <div className="rounded-lg bg-sidebar p-3">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-semibold text-primary">
-              TM
+        {/* User card */}
+        {user && (
+          <div className="rounded-lg bg-muted/50 p-3 space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="h-9 w-9 shrink-0 rounded-full bg-primary/20 flex items-center justify-center text-xs font-semibold text-primary">
+                {getInitials(user.name)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold truncate">{user.name}</p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {ROLE_LABELS[user.role] ?? user.role}
+                </p>
+              </div>
+              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
             </div>
-            <div className="text-sm font-semibold">Team Marketing</div>
+
+            {/* Online indicator */}
+            <div className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-xs text-muted-foreground">
+                Online · {user.email}
+              </span>
+            </div>
           </div>
-          <button className="w-full rounded-md bg-sidebar-primary px-3 py-1.5 text-xs font-semibold text-sidebar-primary-foreground hover:bg-sidebar-primary/90 transition-all">
-            Upgrade Plan
-          </button>
-        </div>
-        <p className="text-xs text-muted-foreground">© 2025 Nexus.us, Inc.</p>
+        )}
+
+        {/* Logout button */}
+        <button
+          onClick={handleLogout}
+          disabled={isLoading}
+          className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50"
+        >
+          <LogOut className="h-4 w-4" />
+          <span>Sign Out</span>
+        </button>
+
+        <p className="text-xs text-muted-foreground text-center">
+          © 2026 Pathom, Inc.
+        </p>
       </div>
     </aside>
   );

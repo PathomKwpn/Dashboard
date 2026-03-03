@@ -1,9 +1,31 @@
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Search, Bell, Settings } from "lucide-react";
+import { Moon, Sun, Search, Bell, Settings, LogOut } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+
+const ROLE_LABELS: Record<string, string> = {
+  admin: "Administrator",
+  business: "Business",
+  user: "User",
+};
+
+const getInitials = (name: string) =>
+  name
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n[0]?.toUpperCase() ?? "")
+    .join("");
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
 
   return (
     <header className="border-b border-border bg-background flex items-center justify-between h-16 px-6 sticky top-0 z-10">
@@ -45,14 +67,29 @@ const Header = () => {
         <div className="h-6 w-px bg-border"></div>
 
         {/* Profile */}
-        <Button variant="ghost" className="flex items-center gap-2 px-3 h-9">
-          <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-semibold text-primary">
-            YA
-          </div>
-          <div className="flex flex-col items-start">
-            <span className="text-xs font-semibold">Young Alasła</span>
-            <span className="text-xs text-muted-foreground">Business</span>
-          </div>
+        {user && (
+          <Button variant="ghost" className="flex items-center gap-2 px-3 h-9">
+            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-semibold text-primary">
+              {getInitials(user.name)}
+            </div>
+            <div className="flex flex-col items-start">
+              <span className="text-xs font-semibold">{user.name}</span>
+              <span className="text-xs text-muted-foreground">
+                {ROLE_LABELS[user.role] ?? user.role}
+              </span>
+            </div>
+          </Button>
+        )}
+
+        {/* Logout */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleLogout}
+          className="text-muted-foreground hover:text-destructive"
+          title="Sign out"
+        >
+          <LogOut className="h-4 w-4" />
         </Button>
       </div>
     </header>
