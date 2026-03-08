@@ -1,4 +1,11 @@
 import { LineChart, PieChart } from "@/components/charts";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import type { EventTimeSeries, LogLevelItem } from "../dashboard.types";
 
 // Muted, professional palette — only varies by lightness/saturation
@@ -20,16 +27,14 @@ const DashboardChartSection = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* Log Volume Trend */}
-      <div className="lg:col-span-2 bg-card rounded-lg border border-border/50">
-        <div className="px-5 pt-5 pb-3">
-          <h3 className="text-sm font-semibold text-foreground">
-            Log Volume Trend
-          </h3>
-          <p className="text-xs text-muted-foreground mt-0.5">
+      <Card className="lg:col-span-2 gap-0 py-0">
+        <CardHeader className="gap-0 px-5 pt-5 pb-3">
+          <CardTitle className="text-sm">Log Volume Trend</CardTitle>
+          <CardDescription className="text-xs mt-0.5">
             Events compared with 24-hour rolling average
-          </p>
-        </div>
-        <div className="px-2 pb-3">
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="px-2 pb-3">
           <LineChart
             xAxisData={timeAxis}
             seriesData={[
@@ -49,21 +54,19 @@ const DashboardChartSection = ({
             ]}
             height="280px"
           />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Log Level Distribution */}
-      <div className="bg-card rounded-lg border border-border/50 flex flex-col">
-        <div className="px-5 pt-5 pb-3">
-          <h3 className="text-sm font-semibold text-foreground">
-            Log Level Distribution
-          </h3>
-          <p className="text-xs text-muted-foreground mt-0.5">
+      <Card className="gap-0 py-0 flex flex-col">
+        <CardHeader className="gap-0 px-5 pt-5 pb-3">
+          <CardTitle className="text-sm">Log Level Distribution</CardTitle>
+          <CardDescription className="text-xs mt-0.5">
             Breakdown by severity
-          </p>
-        </div>
+          </CardDescription>
+        </CardHeader>
 
-        <div className="flex-1 flex flex-col justify-center px-2">
+        <CardContent className="flex-1 flex flex-col justify-center px-2 pb-0">
           <PieChart
             data={logLevelDistribution.map((d, i) => ({
               ...d,
@@ -72,7 +75,7 @@ const DashboardChartSection = ({
             height="190px"
             centerLabel="Total"
           />
-        </div>
+        </CardContent>
 
         {/* Legend */}
         <div className="px-5 pb-5 space-y-2">
@@ -98,7 +101,7 @@ const DashboardChartSection = ({
             );
           })}
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

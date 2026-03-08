@@ -15,6 +15,18 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 
 // ─── Validation schema ────────────────────────────────────────────────────────
 const loginSchema = z.object({
@@ -64,15 +76,15 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormValues>({
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { rememberMe: false },
   });
+  const {
+    handleSubmit,
+    setValue,
+    formState: { isSubmitting },
+  } = form;
 
   // Redirect after successful login
   useEffect(() => {
@@ -215,169 +227,163 @@ const LoginPage = () => {
             </p>
             <div className="flex gap-2 flex-wrap">
               {DEMO_ACCOUNTS.map((acc) => (
-                <button
+                <Button
                   key={acc.email}
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => fillDemo(acc)}
-                  className="flex items-center gap-1.5 rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-xs text-foreground hover:bg-muted transition-colors"
+                  className="h-auto px-3 py-1.5 text-xs gap-1.5"
                 >
                   <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
                   {acc.label}
                   <span className="text-muted-foreground">· {acc.role}</span>
-                </button>
+                </Button>
               ))}
             </div>
           </div>
 
           {/* Divider */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="bg-background px-2 text-muted-foreground">
-                or enter your credentials
-              </span>
-            </div>
+          <div className="relative flex items-center">
+            <Separator className="flex-1" />
+            <span className="mx-2 text-xs text-muted-foreground whitespace-nowrap">
+              or enter your credentials
+            </span>
+            <Separator className="flex-1" />
           </div>
 
           {/* Form */}
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-5"
-            noValidate
-          >
-            {/* Email */}
-            <div className="space-y-1.5">
-              <label
-                htmlFor="email"
-                className="text-sm font-medium text-foreground"
-              >
-                Email
-              </label>
-              <div className="relative">
-                <input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="your@email.com"
-                  {...register("email")}
-                  className={`w-full rounded-lg border bg-background px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 transition-shadow ${
-                    errors.email
-                      ? "border-destructive focus:ring-destructive/30"
-                      : "border-input focus:ring-ring/40"
-                  }`}
-                />
-              </div>
-              {errors.email && (
-                <p className="flex items-center gap-1.5 text-xs text-destructive">
-                  <AlertCircle className="h-3.5 w-3.5 shrink-0" />
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-
-            {/* Password */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="text-sm font-medium text-foreground"
-                >
-                  Password
-                </label>
-                <button
-                  type="button"
-                  className="text-xs text-primary hover:underline"
-                >
-                  Forgot password?
-                </button>
-              </div>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
-                  placeholder="••••••••"
-                  {...register("password")}
-                  className={`w-full rounded-lg border bg-background px-4 py-2.5 pr-10 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 transition-shadow ${
-                    errors.password
-                      ? "border-destructive focus:ring-destructive/30"
-                      : "border-input focus:ring-ring/40"
-                  }`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((p) => !p)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="flex items-center gap-1.5 text-xs text-destructive">
-                  <AlertCircle className="h-3.5 w-3.5 shrink-0" />
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            {/* Remember me */}
-            <div className="flex items-center gap-2">
-              <input
-                id="rememberMe"
-                type="checkbox"
-                {...register("rememberMe")}
-                className="h-4 w-4 rounded border-input accent-primary cursor-pointer"
-              />
-              <label
-                htmlFor="rememberMe"
-                className="text-sm text-muted-foreground cursor-pointer select-none"
-              >
-                Remember me
-              </label>
-            </div>
-
-            {/* Global error */}
-            {error && (
-              <div className="flex items-start gap-2.5 rounded-lg border border-destructive/30 bg-destructive/8 px-4 py-3 text-sm text-destructive">
-                <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
-
-            {/* Success state */}
-            {loginSuccess && (
-              <div className="flex items-center gap-2.5 rounded-lg border border-green-500/30 bg-green-500/8 px-4 py-3 text-sm text-green-600 dark:text-green-400">
-                <CheckCircle2 className="h-4 w-4 shrink-0" />
-                <span>Login successful! Redirecting...</span>
-              </div>
-            )}
-
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={isPending || loginSuccess}
-              className="w-full flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+          <Form {...form}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-5"
+              noValidate
             >
-              {isPending ? (
-                <>
-                  <span className="h-4 w-4 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                <>
-                  <LogIn className="h-4 w-4" />
-                  Sign In
-                </>
+              {/* Email */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        autoComplete="email"
+                        placeholder="your@email.com"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Password */}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Password</FormLabel>
+                      <Button
+                        type="button"
+                        variant="link"
+                        size="sm"
+                        className="h-auto p-0 text-xs"
+                      >
+                        Forgot password?
+                      </Button>
+                    </div>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          autoComplete="current-password"
+                          placeholder="••••••••"
+                          className="pr-10"
+                          {...field}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon-sm"
+                          onClick={() => setShowPassword((p) => !p)}
+                          className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground"
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Remember me */}
+              <FormField
+                control={form.control}
+                name="rememberMe"
+                render={({ field }) => (
+                  <FormItem className="flex items-center gap-2 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="font-normal text-muted-foreground cursor-pointer">
+                      Remember me
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+
+              {/* Global error */}
+              {error && (
+                <div className="flex items-start gap-2.5 rounded-lg border border-destructive/30 bg-destructive/8 px-4 py-3 text-sm text-destructive">
+                  <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                  <span>{error}</span>
+                </div>
               )}
-            </button>
-          </form>
+
+              {/* Success state */}
+              {loginSuccess && (
+                <div className="flex items-center gap-2.5 rounded-lg border border-green-500/30 bg-green-500/8 px-4 py-3 text-sm text-green-600 dark:text-green-400">
+                  <CheckCircle2 className="h-4 w-4 shrink-0" />
+                  <span>Login successful! Redirecting...</span>
+                </div>
+              )}
+
+              {/* Submit */}
+              <Button
+                type="submit"
+                size="lg"
+                disabled={isPending || loginSuccess}
+                className="w-full"
+              >
+                {isPending ? (
+                  <>
+                    <span className="h-4 w-4 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  <>
+                    <LogIn className="h-4 w-4" />
+                    Sign In
+                  </>
+                )}
+              </Button>
+            </form>
+          </Form>
 
           {/* Footer info */}
           <p className="text-center text-xs text-muted-foreground">

@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, ArrowLeft, SearchX } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const NotFoundPage = () => {
   const navigate = useNavigate();
@@ -34,20 +35,14 @@ const NotFoundPage = () => {
 
         {/* Actions */}
         <div className="flex gap-3">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors"
-          >
+          <Button variant="outline" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-4 w-4" />
             Go Back
-          </button>
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
-          >
+          </Button>
+          <Button onClick={() => navigate("/dashboard")}>
             <Home className="h-4 w-4" />
             Home
-          </button>
+          </Button>
         </div>
       </div>
     </div>

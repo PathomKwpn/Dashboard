@@ -12,6 +12,15 @@ import {
   ChevronsRight,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 const GENERAL_MENUS = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
@@ -57,9 +66,9 @@ const MenuItem = ({
       {!collapsed && <span>{menu.label}</span>}
     </div>
     {!collapsed && menu.badge && (
-      <span className="rounded-full bg-destructive px-2 py-0.5 text-xs font-semibold text-white">
+      <Badge variant="destructive" className="rounded-full px-2 py-0.5 text-xs">
         {menu.badge}
-      </span>
+      </Badge>
     )}
   </NavLink>
 );
@@ -99,18 +108,19 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
           </div>
           {!collapsed && <span className="text-lg font-bold">Pathom</span>}
         </div>
-        <button
+        <Button
+          variant="ghost"
+          size="icon-sm"
           onClick={onToggle}
-          className="rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+          className="text-muted-foreground"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? (
             <ChevronsRight className="h-4 w-4" />
           ) : (
             <ChevronsLeft className="h-4 w-4" />
           )}
-        </button>
+        </Button>
       </div>
 
       {/* Navigation */}
@@ -169,9 +179,11 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
             <div
               className={`flex items-center gap-2 ${collapsed ? "justify-center" : ""}`}
             >
-              <div className="h-9 w-9 shrink-0 rounded-full bg-primary/20 flex items-center justify-center text-xs font-semibold text-primary">
-                {getInitials(user.name)}
-              </div>
+              <Avatar size={collapsed ? "sm" : "default"}>
+                <AvatarFallback className="text-xs font-semibold">
+                  {getInitials(user.name)}
+                </AvatarFallback>
+              </Avatar>
               {!collapsed && (
                 <>
                   <div className="flex-1 min-w-0">
@@ -199,18 +211,26 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
           </div>
         )}
 
+        <Separator />
+
         {/* Logout button */}
-        <button
-          onClick={handleLogout}
-          disabled={isLoading}
-          className={`w-full flex items-center rounded-lg px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50 ${
-            collapsed ? "justify-center" : "gap-2"
-          }`}
-          title={collapsed ? "Sign Out" : undefined}
-        >
-          <LogOut className="h-4 w-4" />
-          {!collapsed && <span>Sign Out</span>}
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              onClick={handleLogout}
+              disabled={isLoading}
+              className={`w-full text-destructive hover:text-destructive hover:bg-destructive/10 ${
+                collapsed ? "justify-center px-2" : "justify-start gap-2"
+              }`}
+              size="sm"
+            >
+              <LogOut className="h-4 w-4" />
+              {!collapsed && <span>Sign Out</span>}
+            </Button>
+          </TooltipTrigger>
+          {collapsed && <TooltipContent side="right">Sign Out</TooltipContent>}
+        </Tooltip>
 
         {!collapsed && (
           <p className="text-xs text-muted-foreground text-center">

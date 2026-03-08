@@ -10,11 +10,33 @@ import {
   fetchTopServices,
   fetchRecentAlerts,
 } from "./dashboard.thunks";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import DashboardKPISection from "./components/DashboardKPISection";
 import DashboardChartSection from "./components/DashboardChartSection";
 import DashboardAlertsTable from "./components/DashboardAlertsTable";
 import DashboardTopSourceIPTable from "./components/DashboardTopSourceIPTable";
 import DashboardTopServicesTable from "./components/DashboardTopServicesTable";
+
+const DashboardSkeleton = () => (
+  <div className="max-w-7xl mx-auto px-6 py-6 space-y-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <Skeleton key={i} className="h-30 rounded-xl" />
+      ))}
+    </div>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <Skeleton className="lg:col-span-2 h-85 rounded-xl" />
+      <Skeleton className="h-85 rounded-xl" />
+    </div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <Skeleton className="h-70 rounded-xl" />
+      <Skeleton className="h-70 rounded-xl" />
+    </div>
+    <Skeleton className="h-75 rounded-xl" />
+  </div>
+);
 
 const DashboardPage = () => {
   const dispatch = useAppDispatch();
@@ -64,8 +86,14 @@ const DashboardPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg text-muted-foreground">Loading...</p>
+      <div className="min-h-full">
+        <div className="border-b border-border/40">
+          <div className="max-w-7xl mx-auto px-6 py-5">
+            <Skeleton className="h-6 w-40" />
+            <Skeleton className="h-4 w-64 mt-2" />
+          </div>
+        </div>
+        <DashboardSkeleton />
       </div>
     );
   }
@@ -73,7 +101,9 @@ const DashboardPage = () => {
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg text-destructive">Error: {error}</p>
+        <Badge variant="destructive" className="text-sm px-4 py-2">
+          Error: {error}
+        </Badge>
       </div>
     );
   }
@@ -91,13 +121,16 @@ const DashboardPage = () => {
               Log volume, severity trends, and alert monitoring
             </p>
           </div>
-          <div className="text-right shrink-0 ml-8">
-            <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-              Last updated
-            </p>
-            <p className="text-sm font-medium text-foreground mt-0.5 tabular-nums">
-              {lastUpdated}
-            </p>
+          <div className="flex items-center gap-3">
+            <Separator orientation="vertical" className="h-8" />
+            <div className="text-right shrink-0">
+              <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                Last updated
+              </p>
+              <p className="text-sm font-medium text-foreground mt-0.5 tabular-nums">
+                {lastUpdated}
+              </p>
+            </div>
           </div>
         </div>
       </div>
