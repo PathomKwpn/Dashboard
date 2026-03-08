@@ -1,108 +1,132 @@
 import moment from "moment";
-import type { EventItem } from "../dashboard.types";
+import type { AlertStatus, RiskLevel, RecentAlert } from "../dashboard.types";
 
-interface DashboardAlertsTableProps {
-  events: EventItem[];
+interface Props {
+  alerts: RecentAlert[];
 }
 
-const riskBadgeClass: Record<string, string> = {
-  critical: "bg-red-100 text-red-700",
-  high: "bg-orange-100 text-orange-700",
-  medium: "bg-yellow-100 text-yellow-700",
-  low: "bg-green-100 text-green-700",
+const severityStyle: Record<RiskLevel, { label: string; cls: string }> = {
+  critical: {
+    label: "Critical",
+    cls: "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/15",
+  },
+  high: {
+    label: "High",
+    cls: "text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/15",
+  },
+  medium: {
+    label: "Medium",
+    cls: "text-yellow-700 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/15",
+  },
+  low: {
+    label: "Low",
+    cls: "text-muted-foreground bg-muted/60",
+  },
 };
 
-const DashboardAlertsTable = ({ events }: DashboardAlertsTableProps) => {
+const statusStyle: Record<AlertStatus, { label: string; cls: string }> = {
+  open: {
+    label: "Open",
+    cls: "text-red-600 dark:text-red-400",
+  },
+  ack: {
+    label: "Acknowledged",
+    cls: "text-sky-600 dark:text-sky-400",
+  },
+  resolved: {
+    label: "Resolved",
+    cls: "text-emerald-600 dark:text-emerald-400",
+  },
+};
+
+const DashboardAlertsTable = ({ alerts }: Props) => {
   return (
-    <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-card rounded-lg border border-border/50">
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border/40">
         <div>
-          <h2 className="text-lg font-semibold">Top Alerts</h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Recent log anomalies and spikes
+          <h3 className="text-sm font-semibold text-foreground">
+            Recent Alerts
+          </h3>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Latest security and anomaly events
           </p>
         </div>
-        <button className="text-sm text-primary hover:underline">
-          View full report →
-        </button>
+        <span className="text-xs font-medium text-muted-foreground">
+          {alerts.length} alerts
+        </span>
       </div>
 
+      {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="border-b border-border/50">
-            <tr className="text-left">
-              <th className="pb-4 font-semibold text-muted-foreground">Time</th>
-              <th className="pb-4 font-semibold text-muted-foreground">Risk</th>
-              <th className="pb-4 font-semibold text-muted-foreground">
-                Source IP
-              </th>
-              <th className="pb-4 font-semibold text-muted-foreground">
-                Country
-              </th>
-              <th className="pb-4 font-semibold text-muted-foreground">
-                Events
-              </th>
-              <th className="pb-4 font-semibold text-muted-foreground">
-                Change
-              </th>
-              <th className="pb-4 font-semibold text-muted-foreground">
-                Growth
-              </th>
+          <thead>
+            <tr className="border-b border-border/40">
+              {[
+                "ID",
+                "Time",
+                "Severity",
+                "Source IP",
+                "Service",
+                "Message",
+                "Status",
+              ].map((h) => (
+                <th
+                  key={h}
+                  className="px-4 py-2.5 text-left text-[10px] font-medium uppercase tracking-wider text-muted-foreground"
+                >
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
-          <tbody>
-            {events.map((item) => (
-              <tr
-                key={item.id}
-                className="border-b border-border/50 hover:bg-muted/30 transition-colors"
-              >
-                <td className="py-4">
-                  <span className="text-xs text-muted-foreground">
-                    {moment(item.detect_time).format("YYYY-MM-DD HH:mm")}
-                  </span>
-                </td>
-                <td className="py-4">
-                  <span
-                    className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold capitalize ${
-                      riskBadgeClass[item.risk_level] ?? ""
-                    }`}
-                  >
-                    {item.risk_level}
-                  </span>
-                </td>
-                <td className="py-4">
-                  <span className="font-medium text-foreground">
-                    {item.source_ip}
-                  </span>
-                </td>
-                <td className="py-4">
-                  <span className="text-muted-foreground">{item.country}</span>
-                </td>
-                <td className="py-4">
-                  <span className="font-semibold">
-                    {item.events.toLocaleString()}
-                  </span>
-                </td>
-                <td className="py-4">
-                  <span className="text-muted-foreground">
-                    {item.diff >= 0 ? "+" : ""}
-                    {item.diff.toLocaleString()}
-                  </span>
-                </td>
-                <td className="py-4">
-                  <span
-                    className={`font-semibold ${
-                      item.growth_percent >= 0
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {item.growth_percent >= 0 ? "+" : ""}
-                    {item.growth_percent.toFixed(2)}%
-                  </span>
-                </td>
-              </tr>
-            ))}
+          <tbody className="divide-y divide-border/30">
+            {alerts.map((alert) => {
+              const sv = severityStyle[alert.severity] ?? severityStyle.low;
+              const st = statusStyle[alert.status] ?? statusStyle.open;
+              return (
+                <tr
+                  key={alert.id}
+                  className="hover:bg-muted/30 transition-colors"
+                >
+                  <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
+                    {alert.id}
+                  </td>
+
+                  <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">
+                    {moment(alert.timestamp).format("MMM DD, HH:mm")}
+                  </td>
+
+                  <td className="px-4 py-3">
+                    <span
+                      className={`inline-block rounded-md px-2 py-0.5 text-[11px] font-medium ${sv.cls}`}
+                    >
+                      {sv.label}
+                    </span>
+                  </td>
+
+                  <td className="px-4 py-3 font-mono text-xs">
+                    {alert.source_ip}
+                  </td>
+
+                  <td className="px-4 py-3">
+                    <span className="text-xs font-medium">{alert.service}</span>
+                  </td>
+
+                  <td className="px-4 py-3 max-w-sm">
+                    <p className="truncate text-xs text-foreground/80">
+                      {alert.message}
+                    </p>
+                  </td>
+
+                  <td className="px-4 py-3">
+                    <span className={`text-[11px] font-medium ${st.cls}`}>
+                      {st.label}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

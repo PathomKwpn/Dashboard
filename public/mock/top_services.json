@@ -1,0 +1,10 @@
+[
+  { "rank": 1, "service": "nginx",        "log_count": 28400, "error_count": 320,  "error_rate": 1.13, "status": "healthy"  },
+  { "rank": 2, "service": "auth-service", "log_count": 19200, "error_count": 890,  "error_rate": 4.64, "status": "warning"  },
+  { "rank": 3, "service": "api-gateway",  "log_count": 15670, "error_count": 1240, "error_rate": 7.92, "status": "critical" },
+  { "rank": 4, "service": "postgres",     "log_count": 8920,  "error_count": 45,   "error_rate": 0.50, "status": "healthy"  },
+  { "rank": 5, "service": "redis",        "log_count": 6430,  "error_count": 12,   "error_rate": 0.19, "status": "healthy"  },
+  { "rank": 6, "service": "kafka",        "log_count": 5120,  "error_count": 230,  "error_rate": 4.49, "status": "warning"  },
+  { "rank": 7, "service": "web-ui",       "log_count": 4210,  "error_count": 98,   "error_rate": 2.33, "status": "healthy"  },
+  { "rank": 8, "service": "smtp-relay",   "log_count": 2870,  "error_count": 540,  "error_rate": 18.82,"status": "critical" }
+]

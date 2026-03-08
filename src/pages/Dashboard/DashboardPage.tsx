@@ -5,29 +5,51 @@ import {
   fetchEventList,
   fetchEventTimeSeries,
   fetchSummary,
+  fetchLogLevelDistribution,
+  fetchTopSourceIPs,
+  fetchTopServices,
+  fetchRecentAlerts,
 } from "./dashboard.thunks";
 import DashboardKPISection from "./components/DashboardKPISection";
 import DashboardChartSection from "./components/DashboardChartSection";
 import DashboardAlertsTable from "./components/DashboardAlertsTable";
+import DashboardTopSourceIPTable from "./components/DashboardTopSourceIPTable";
+import DashboardTopServicesTable from "./components/DashboardTopServicesTable";
 
 const DashboardPage = () => {
   const dispatch = useAppDispatch();
   const {
     summary,
     timeSeries,
-    events,
+    logLevelDistribution,
+    topSourceIPs,
+    topServices,
+    recentAlerts,
     summaryLoading,
     timeSeriesLoading,
-    eventsLoading,
+    logLevelLoading,
+    topSourceIPsLoading,
+    topServicesLoading,
+    recentAlertsLoading,
     error,
   } = useAppSelector((state) => state.dashboard);
 
-  const isLoading = summaryLoading || timeSeriesLoading || eventsLoading;
+  const isLoading =
+    summaryLoading ||
+    timeSeriesLoading ||
+    logLevelLoading ||
+    topSourceIPsLoading ||
+    topServicesLoading ||
+    recentAlertsLoading;
 
   useEffect(() => {
     dispatch(fetchSummary());
     dispatch(fetchEventTimeSeries());
     dispatch(fetchEventList());
+    dispatch(fetchLogLevelDistribution());
+    dispatch(fetchTopSourceIPs());
+    dispatch(fetchTopServices());
+    dispatch(fetchRecentAlerts());
   }, [dispatch]);
 
   const lastUpdated = useMemo(() => {
@@ -39,9 +61,6 @@ const DashboardPage = () => {
     () => timeSeries.map((item) => moment(item.detect_time).format("HH:mm")),
     [timeSeries],
   );
-
-  const hasData =
-    Boolean(summary) || timeSeries.length > 0 || events.length > 0;
 
   if (isLoading) {
     return (
@@ -59,42 +78,51 @@ const DashboardPage = () => {
     );
   }
 
-  if (!hasData) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg text-muted-foreground">No data available</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight">
-            Log Management Dashboard
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Monitor log volume, severity trends, and suspicious activity.
-          </p>
-        </div>
-        <div className="text-right">
-          <p className="text-sm text-muted-foreground">Last updated</p>
-          <p className="text-sm font-medium text-foreground mt-1">
-            {lastUpdated}
-          </p>
+    <div className="min-h-full">
+      {/* Page header */}
+      <div className="border-b border-border/40">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex items-end justify-between">
+          <div>
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">
+              Dashboard
+            </h1>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              Log volume, severity trends, and alert monitoring
+            </p>
+          </div>
+          <div className="text-right shrink-0 ml-8">
+            <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+              Last updated
+            </p>
+            <p className="text-sm font-medium text-foreground mt-0.5 tabular-nums">
+              {lastUpdated}
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* KPI Cards */}
-      {summary && <DashboardKPISection summary={summary} />}
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6 space-y-4">
+        {/* 1. KPIs */}
+        {summary && <DashboardKPISection summary={summary} />}
 
-      {/* Charts */}
-      <DashboardChartSection timeAxis={timeAxis} timeSeries={timeSeries} />
+        {/* 2 + 3. Charts */}
+        <DashboardChartSection
+          timeAxis={timeAxis}
+          timeSeries={timeSeries}
+          logLevelDistribution={logLevelDistribution}
+        />
 
-      {/* Alerts Table */}
-      <DashboardAlertsTable events={events} />
+        {/* 4 + 5. Tables side by side */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <DashboardTopSourceIPTable data={topSourceIPs} />
+          <DashboardTopServicesTable data={topServices} />
+        </div>
+
+        {/* 6. Recent Alerts */}
+        <DashboardAlertsTable alerts={recentAlerts} />
+      </div>
     </div>
   );
 };

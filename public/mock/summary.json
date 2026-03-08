@@ -1,10 +1,19 @@
 {
-  "total_events": 71918,
+  "total_logs": 71918,
+  "critical_alerts": 66,
+  "error_rate": 3.4,
+  "avg_response_ms": 142,
   "severity": {
     "critical": 66872,
-    "high": 0,
+    "high": 1024,
     "medium": 2523,
     "low": 523
   },
-  "last_updated": "2026-01-15T12:00:00Z"
+  "changes": {
+    "total_logs": 10,
+    "critical_alerts": -5,
+    "error_rate": -2,
+    "avg_response_ms": 8
+  },
+  "last_updated": "2026-03-08T08:00:00Z"
 }

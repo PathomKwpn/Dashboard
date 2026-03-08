@@ -1,4 +1,5 @@
 import KPICard from "@/components/common/KPICard";
+import { Activity, ShieldAlert, Gauge, Timer } from "lucide-react";
 import type { DashboardSummary } from "../dashboard.types";
 
 interface DashboardKPISectionProps {
@@ -6,31 +7,36 @@ interface DashboardKPISectionProps {
 }
 
 const DashboardKPISection = ({ summary }: DashboardKPISectionProps) => {
+  const c = summary.changes ?? {};
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       <KPICard
-        label="Total Events"
-        value={summary.total_events?.toLocaleString() ?? "-"}
-        description="Total logs processed"
-        change={10}
+        label="Total Log Volume"
+        value={summary.total_logs?.toLocaleString() ?? "-"}
+        description="Ingested today"
+        change={c.total_logs}
+        icon={<Activity className="h-4 w-4" />}
       />
       <KPICard
-        label="Critical"
-        value={summary.severity.critical?.toLocaleString() ?? "-"}
-        description="Immediate action required"
-        change={-5}
+        label="Critical Alerts"
+        value={summary.critical_alerts?.toLocaleString() ?? "-"}
+        description="Requires attention"
+        change={c.critical_alerts}
+        icon={<ShieldAlert className="h-4 w-4" />}
       />
       <KPICard
-        label="High"
-        value={summary.severity.high?.toLocaleString() ?? "-"}
-        description="High risk alerts"
-        change={-20}
+        label="Error Rate"
+        value={`${summary.error_rate?.toFixed(1) ?? "-"}%`}
+        description="Error-level entries"
+        change={c.error_rate}
+        icon={<Gauge className="h-4 w-4" />}
       />
       <KPICard
-        label="Medium"
-        value={summary.severity.medium?.toLocaleString() ?? "-"}
-        description="Potential issues"
-        change={15}
+        label="Avg Response Time"
+        value={`${summary.avg_response_ms?.toLocaleString() ?? "-"} ms`}
+        description="Service latency"
+        change={c.avg_response_ms}
+        icon={<Timer className="h-4 w-4" />}
       />
     </div>
   );

@@ -1,0 +1,12 @@
+[
+  { "id": "ALT-001", "timestamp": "2026-03-08T07:55:00Z", "severity": "critical", "source_ip": "203.154.68.12", "service": "api-gateway",  "message": "Brute-force login attempt detected – 512 requests in 60s",         "status": "open"     },
+  { "id": "ALT-002", "timestamp": "2026-03-08T07:48:00Z", "severity": "high",     "source_ip": "91.108.4.43",   "service": "auth-service", "message": "Repeated failed SSH authentication from foreign IP",                "status": "open"     },
+  { "id": "ALT-003", "timestamp": "2026-03-08T07:40:00Z", "severity": "critical", "source_ip": "192.168.1.105", "service": "nginx",        "message": "Possible SQL injection payload detected in request body",           "status": "ack"      },
+  { "id": "ALT-004", "timestamp": "2026-03-08T07:31:00Z", "severity": "high",     "source_ip": "45.33.32.156",  "service": "api-gateway",  "message": "Unusual spike: 3,200 req/min – DDoS pattern suspected",            "status": "ack"      },
+  { "id": "ALT-005", "timestamp": "2026-03-08T07:20:00Z", "severity": "medium",   "source_ip": "172.16.0.88",   "service": "postgres",     "message": "High number of slow queries (>2 s) – possible table lock",         "status": "open"     },
+  { "id": "ALT-006", "timestamp": "2026-03-08T07:14:00Z", "severity": "medium",   "source_ip": "185.220.101.8", "service": "smtp-relay",   "message": "Unauthorized relay attempt – SPF/DKIM validation failed",          "status": "open"     },
+  { "id": "ALT-007", "timestamp": "2026-03-08T07:05:00Z", "severity": "high",     "source_ip": "103.21.244.0",  "service": "auth-service", "message": "JWT token reuse detected – possible session hijack",              "status": "ack"      },
+  { "id": "ALT-008", "timestamp": "2026-03-08T06:58:00Z", "severity": "low",      "source_ip": "66.249.66.1",   "service": "web-ui",       "message": "Crawler detected – User-Agent: Googlebot, high request frequency", "status": "resolved" },
+  { "id": "ALT-009", "timestamp": "2026-03-08T06:45:00Z", "severity": "medium",   "source_ip": "1.179.112.13",  "service": "kafka",        "message": "Consumer lag exceeded 50,000 messages – processing bottleneck",    "status": "resolved" },
+  { "id": "ALT-010", "timestamp": "2026-03-08T06:30:00Z", "severity": "critical", "source_ip": "10.0.0.23",     "service": "api-gateway",  "message": "Certificate expiry in 3 days – TLS handshake may fail",           "status": "open"     }
+]

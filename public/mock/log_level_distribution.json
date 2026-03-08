@@ -1,0 +1,7 @@
+[
+  { "name": "Critical", "value": 66872 },
+  { "name": "High",     "value": 1024  },
+  { "name": "Medium",   "value": 2523  },
+  { "name": "Low",      "value": 523   },
+  { "name": "Info",     "value": 976   }
+]
