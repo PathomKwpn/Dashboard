@@ -51,7 +51,7 @@ const MenuItem = ({
   <NavLink
     to={menu.to}
     className={({ isActive }) =>
-      `flex items-center rounded-lg py-2 text-sm transition-all ${
+      `flex items-center rounded-lg py-2 text-sm  ${
         collapsed ? "justify-center px-2" : "justify-between px-3"
       } ${
         isActive
@@ -96,7 +96,7 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
 
   return (
     <aside
-      className={`bg-background border-r border-border min-h-screen flex flex-col transition-all duration-300 ${
+      className={`bg-background border-r border-border min-h-screen flex flex-col ${
         collapsed ? "w-20" : "w-64"
       }`}
     >

@@ -1,10 +1,13 @@
+import { ArrowUpRight } from "lucide-react";
 import {
   Card,
+  CardAction,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import type { ServiceStatus, TopService } from "../dashboard.types";
 
 interface Props {
@@ -17,16 +20,31 @@ const statusDot: Record<ServiceStatus, string> = {
   critical: "bg-red-500",
 };
 
+const statusBar: Record<ServiceStatus, string> = {
+  healthy: "bg-emerald-500",
+  warning: "bg-orange-400",
+  critical: "bg-red-500",
+};
+
 const DashboardTopServicesTable = ({ data }: Props) => {
   const maxLogs = Math.max(...data.map((d) => d.log_count), 1);
 
   return (
-    <Card className="gap-0 py-0">
+    <Card className="gap-0 py-0 border-none">
       <CardHeader className="gap-0 px-5 pt-5 pb-4">
         <CardTitle className="text-sm">Top Services</CardTitle>
         <CardDescription className="text-xs mt-0.5">
           Log volume and error metrics
         </CardDescription>
+        <CardAction>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="text-muted-foreground/40 hover:text-foreground"
+          >
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </Button>
+        </CardAction>
       </CardHeader>
 
       <CardContent className="px-0 pb-2">
@@ -53,9 +71,9 @@ const DashboardTopServicesTable = ({ data }: Props) => {
                       {row.log_count.toLocaleString()}
                     </span>
                   </div>
-                  <div className="h-1 w-full rounded-full bg-muted overflow-hidden">
+                  <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-foreground/15 transition-all"
+                      className={`h-full rounded-full  ${statusBar[row.status] ?? "bg-foreground/15"}`}
                       style={{ width: `${barPct}%` }}
                     />
                   </div>

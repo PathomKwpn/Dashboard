@@ -15,28 +15,28 @@ const DashboardKPISection = ({ summary }: DashboardKPISectionProps) => {
         value={summary.total_logs?.toLocaleString() ?? "-"}
         description="Ingested today"
         change={c.total_logs}
-        icon={<Activity className="h-4 w-4" />}
+        icon={<Activity size={20} />}
       />
       <KPICard
         label="Critical Alerts"
         value={summary.critical_alerts?.toLocaleString() ?? "-"}
         description="Requires attention"
         change={c.critical_alerts}
-        icon={<ShieldAlert className="h-4 w-4" />}
+        icon={<ShieldAlert size={20} />}
       />
       <KPICard
         label="Error Rate"
         value={`${summary.error_rate?.toFixed(1) ?? "-"}%`}
         description="Error-level entries"
         change={c.error_rate}
-        icon={<Gauge className="h-4 w-4" />}
+        icon={<Gauge size={20} />}
       />
       <KPICard
         label="Avg Response Time"
         value={`${summary.avg_response_ms?.toLocaleString() ?? "-"} ms`}
         description="Service latency"
         change={c.avg_response_ms}
-        icon={<Timer className="h-4 w-4" />}
+        icon={<Timer size={20} />}
       />
     </div>
   );

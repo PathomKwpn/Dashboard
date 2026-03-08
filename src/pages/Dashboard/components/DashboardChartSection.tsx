@@ -1,11 +1,14 @@
+import { ArrowUpRight } from "lucide-react";
 import { LineChart, PieChart } from "@/components/charts";
 import {
   Card,
+  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import type { EventTimeSeries, LogLevelItem } from "../dashboard.types";
 
 // Muted, professional palette — only varies by lightness/saturation
@@ -27,13 +30,59 @@ const DashboardChartSection = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* Log Volume Trend */}
-      <Card className="lg:col-span-2 gap-0 py-0">
+      <Card className="lg:col-span-2 gap-0 py-0 border-none">
         <CardHeader className="gap-0 px-5 pt-5 pb-3">
           <CardTitle className="text-sm">Log Volume Trend</CardTitle>
           <CardDescription className="text-xs mt-0.5">
             Events compared with 24-hour rolling average
           </CardDescription>
+          <CardAction>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="text-muted-foreground/40 hover:text-foreground"
+            >
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Button>
+          </CardAction>
         </CardHeader>
+        <div className="px-5 pb-3 flex items-center gap-6 border-t border-border/40 pt-3">
+          <div>
+            <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+              Peak
+            </p>
+            <p className="text-sm font-semibold tabular-nums">
+              {timeSeries.length > 0
+                ? Math.max(...timeSeries.map((d) => d.events)).toLocaleString()
+                : "—"}
+            </p>
+          </div>
+          <div>
+            <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+              Avg / hr
+            </p>
+            <p className="text-sm font-semibold tabular-nums">
+              {timeSeries.length > 0
+                ? Math.round(
+                    timeSeries.reduce((s, d) => s + d.events, 0) /
+                      timeSeries.length,
+                  ).toLocaleString()
+                : "—"}
+            </p>
+          </div>
+          <div>
+            <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+              Current Avg
+            </p>
+            <p className="text-sm font-semibold tabular-nums">
+              {timeSeries.length > 0
+                ? (timeSeries[
+                    timeSeries.length - 1
+                  ]?.avg_24h?.toLocaleString() ?? "—")
+                : "—"}
+            </p>
+          </div>
+        </div>
         <CardContent className="px-2 pb-3">
           <LineChart
             xAxisData={timeAxis}
@@ -58,12 +107,26 @@ const DashboardChartSection = ({
       </Card>
 
       {/* Log Level Distribution */}
-      <Card className="gap-0 py-0 flex flex-col">
+      <Card className="gap-0 py-0 flex flex-col border-none">
         <CardHeader className="gap-0 px-5 pt-5 pb-3">
           <CardTitle className="text-sm">Log Level Distribution</CardTitle>
           <CardDescription className="text-xs mt-0.5">
             Breakdown by severity
           </CardDescription>
+          <CardAction>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold tabular-nums">
+                {totalLogs.toLocaleString()}
+              </span>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="text-muted-foreground/40 hover:text-foreground"
+              >
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          </CardAction>
         </CardHeader>
 
         <CardContent className="flex-1 flex flex-col justify-center px-2 pb-0">

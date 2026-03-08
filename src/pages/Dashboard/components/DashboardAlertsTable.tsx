@@ -1,4 +1,5 @@
 import moment from "moment";
+import { ArrowUpRight } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -16,28 +17,36 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { AlertStatus, RiskLevel, RecentAlert } from "../dashboard.types";
 
 interface Props {
   alerts: RecentAlert[];
 }
 
-const severityVariant: Record<RiskLevel, { label: string; cls: string }> = {
+const severityVariant: Record<
+  RiskLevel,
+  { label: string; cls: string; row: string }
+> = {
   critical: {
     label: "Critical",
     cls: "bg-red-50 text-red-600 border-red-200 dark:bg-red-900/15 dark:text-red-400 dark:border-red-800/30",
+    row: "border-l-2 border-l-red-500",
   },
   high: {
     label: "High",
     cls: "bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-900/15 dark:text-orange-400 dark:border-orange-800/30",
+    row: "border-l-2 border-l-orange-500",
   },
   medium: {
     label: "Medium",
     cls: "bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/15 dark:text-yellow-400 dark:border-yellow-800/30",
+    row: "border-l-2 border-l-yellow-400",
   },
   low: {
     label: "Low",
     cls: "bg-muted text-muted-foreground border-border",
+    row: "border-l-2 border-l-border",
   },
 };
 
@@ -58,16 +67,25 @@ const statusStyle: Record<AlertStatus, { label: string; cls: string }> = {
 
 const DashboardAlertsTable = ({ alerts }: Props) => {
   return (
-    <Card className="gap-0 py-0">
+    <Card className="gap-0 py-0 border-none">
       <CardHeader className="gap-0 px-5 pt-5 pb-4">
         <CardTitle className="text-sm">Recent Alerts</CardTitle>
         <CardDescription className="text-xs mt-0.5">
           Latest security and anomaly events
         </CardDescription>
         <CardAction>
-          <Badge variant="secondary" className="text-[11px]">
-            {alerts.length} alerts
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="text-[11px]">
+              {alerts.length} alerts
+            </Badge>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="text-muted-foreground/40 hover:text-foreground"
+            >
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Button>
+          </div>
         </CardAction>
       </CardHeader>
 
@@ -98,7 +116,7 @@ const DashboardAlertsTable = ({ alerts }: Props) => {
               const sv = severityVariant[alert.severity] ?? severityVariant.low;
               const st = statusStyle[alert.status] ?? statusStyle.open;
               return (
-                <TableRow key={alert.id}>
+                <TableRow key={alert.id} className={sv.row}>
                   <TableCell className="px-4 py-3 font-mono text-xs text-muted-foreground">
                     {alert.id}
                   </TableCell>

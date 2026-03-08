@@ -56,7 +56,7 @@ const PieChart = ({
           itemStyle: {
             borderRadius: 4,
             borderColor: isDark ? "#1a1a2e" : "#ffffff",
-            borderWidth: 2,
+            // borderWidth: 2,
           },
           label: {
             show: true,
