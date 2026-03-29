@@ -1,0 +1,13 @@
+{
+  "total_events": 4821,
+  "suspicious_ips": 147,
+  "countries_detected": 34,
+  "blocked_attacks": 3912,
+  "changes": {
+    "total_events": 12.4,
+    "suspicious_ips": -8.2,
+    "countries_detected": 2.9,
+    "blocked_attacks": 15.1
+  },
+  "last_updated": "2026-03-21T09:35:50Z"
+}

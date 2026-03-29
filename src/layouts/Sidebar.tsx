@@ -10,12 +10,13 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  ScrollText,
+  Globe,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipTrigger,
@@ -24,23 +25,28 @@ import {
 
 const GENERAL_MENUS = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
-  { label: "Messages", to: "/messages", icon: MessageSquare, badge: 8 },
+  { label: "Messages",  to: "/messages",  icon: MessageSquare, badge: 8 },
 ];
 
-const TOOLS_MENUS = [{ label: "Events", to: "/events", icon: AlertTriangle }];
+const TOOLS_MENUS = [
+  { label: "Events",        to: "/events",        icon: AlertTriangle },
+  { label: "Log Explorer",  to: "/log-explorer",  icon: ScrollText    },
+  { label: "Geo Detection", to: "/geo-detection", icon: Globe         },
+];
 
 const SUPPORT_MENUS = [
-  { label: "Settings", to: "/settings", icon: Settings },
-  { label: "Security", to: "/security", icon: Lock },
-  { label: "Help", to: "/help", icon: HelpCircle },
+  { label: "Settings", to: "/settings", icon: Settings  },
+  { label: "Security", to: "/security", icon: Lock      },
+  { label: "Help",     to: "/help",     icon: HelpCircle },
 ];
 
 const ROLE_LABELS: Record<string, string> = {
-  admin: "Administrator",
+  admin:    "Administrator",
   business: "Business",
-  user: "User",
+  user:     "User",
 };
 
+/* ─── Nav item ──────────────────────────────────────────────────────────── */
 const MenuItem = ({
   menu,
   collapsed,
@@ -51,26 +57,44 @@ const MenuItem = ({
   <NavLink
     to={menu.to}
     className={({ isActive }) =>
-      `flex items-center rounded-lg py-2 text-sm  ${
+      `group relative flex items-center rounded-lg py-2 text-sm transition-all duration-150 ${
         collapsed ? "justify-center px-2" : "justify-between px-3"
       } ${
         isActive
-          ? "bg-primary text-primary-foreground"
-          : "text-foreground hover:bg-muted"
+          ? "bg-primary/10 text-primary font-medium"
+          : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
       }`
     }
     title={collapsed ? menu.label : undefined}
   >
-    <div className="flex items-center gap-3">
-      <menu.icon className="h-4 w-4" />
-      {!collapsed && <span>{menu.label}</span>}
-    </div>
-    {!collapsed && menu.badge && (
-      <Badge variant="destructive" className="rounded-full px-2 py-0.5 text-xs">
-        {menu.badge}
-      </Badge>
+    {({ isActive }) => (
+      <>
+        {/* Left accent bar on active */}
+        {isActive && !collapsed && (
+          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4/5 rounded-r-full bg-primary" />
+        )}
+        <div className="flex items-center gap-3">
+          <menu.icon className="h-4 w-4 shrink-0" />
+          {!collapsed && <span>{menu.label}</span>}
+        </div>
+        {!collapsed && menu.badge && (
+          <Badge
+            variant="destructive"
+            className="rounded-full px-1.5 py-0 h-4 text-[10px] min-w-4 flex items-center justify-center"
+          >
+            {menu.badge}
+          </Badge>
+        )}
+      </>
     )}
   </NavLink>
+);
+
+/* ─── Section label ─────────────────────────────────────────────────────── */
+const SectionLabel = ({ label }: { label: string }) => (
+  <h3 className="mb-1.5 px-3 text-[10px] font-semibold tracking-widest uppercase text-muted-foreground/40 select-none">
+    {label}
+  </h3>
 );
 
 const getInitials = (name: string) =>
@@ -85,6 +109,7 @@ type SidebarProps = {
   onToggle: () => void;
 };
 
+/* ─── Sidebar ───────────────────────────────────────────────────────────── */
 const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
   const { user, logout, isLoading } = useAuth();
   const navigate = useNavigate();
@@ -96,144 +121,182 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
 
   return (
     <aside
-      className={`bg-background border-r border-border min-h-screen flex flex-col ${
-        collapsed ? "w-20" : "w-64"
+      className={`bg-sidebar border-r border-sidebar-border min-h-screen flex flex-col transition-all duration-200 ${
+        collapsed ? "w-16" : "w-60"
       }`}
     >
-      {/* Logo */}
-      <div className="flex items-center justify-between border-b border-border p-4">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
+      {/* ── Brand ── */}
+      <div className="flex items-center justify-between border-b border-sidebar-border h-14 px-4">
+        <div className="flex items-center gap-2.5 min-w-0">
+          {/* Gradient logo mark */}
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-linear-to-br from-indigo-500 to-violet-600 text-white font-bold text-sm shadow-md shadow-indigo-500/20 shrink-0 select-none">
             P
           </div>
-          {!collapsed && <span className="text-lg font-bold">Pathom</span>}
+          {!collapsed && (
+            <div className="min-w-0">
+              <span className="text-sm font-bold tracking-tight text-foreground">
+                Pathom
+              </span>
+              <span className="block text-[10px] text-muted-foreground/50 font-normal leading-none mt-0.5">
+                Security Platform
+              </span>
+            </div>
+          )}
         </div>
+
         <Button
           variant="ghost"
           size="icon-sm"
           onClick={onToggle}
-          className="text-muted-foreground"
+          className="text-muted-foreground/50 hover:text-foreground shrink-0"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? (
-            <ChevronsRight className="h-4 w-4" />
+            <ChevronsRight className="h-3.5 w-3.5" />
           ) : (
-            <ChevronsLeft className="h-4 w-4" />
+            <ChevronsLeft className="h-3.5 w-3.5" />
           )}
         </Button>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 space-y-6 overflow-y-auto p-4">
+      {/* ── Navigation ── */}
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
         {/* General */}
         <div>
-          {!collapsed && (
-            <h3 className="mb-2 px-3 text-xs font-semibold uppercase text-muted-foreground">
-              General
-            </h3>
-          )}
-          <div className="space-y-1">
-            {GENERAL_MENUS.map((menu) => (
-              <MenuItem key={menu.to} menu={menu} collapsed={collapsed} />
-            ))}
+          {!collapsed && <SectionLabel label="General" />}
+          <div className="space-y-0.5">
+            {GENERAL_MENUS.map((menu) =>
+              collapsed ? (
+                <Tooltip key={menu.to}>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <MenuItem menu={menu} collapsed={collapsed} />
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">{menu.label}</TooltipContent>
+                </Tooltip>
+              ) : (
+                <MenuItem key={menu.to} menu={menu} collapsed={collapsed} />
+              ),
+            )}
           </div>
         </div>
 
         {/* Tools */}
         <div>
-          {!collapsed && (
-            <h3 className="mb-2 px-3 text-xs font-semibold uppercase text-muted-foreground">
-              Tools
-            </h3>
-          )}
-          <div className="space-y-1">
-            {TOOLS_MENUS.map((menu) => (
-              <MenuItem key={menu.to} menu={menu} collapsed={collapsed} />
-            ))}
+          {!collapsed && <SectionLabel label="Tools" />}
+          <div className="space-y-0.5">
+            {TOOLS_MENUS.map((menu) =>
+              collapsed ? (
+                <Tooltip key={menu.to}>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <MenuItem menu={menu} collapsed={collapsed} />
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">{menu.label}</TooltipContent>
+                </Tooltip>
+              ) : (
+                <MenuItem key={menu.to} menu={menu} collapsed={collapsed} />
+              ),
+            )}
           </div>
         </div>
 
         {/* Support */}
         <div>
-          {!collapsed && (
-            <h3 className="mb-2 px-3 text-xs font-semibold uppercase text-muted-foreground">
-              Support
-            </h3>
-          )}
-          <div className="space-y-1">
-            {SUPPORT_MENUS.map((menu) => (
-              <MenuItem key={menu.to} menu={menu} collapsed={collapsed} />
-            ))}
+          {!collapsed && <SectionLabel label="Support" />}
+          <div className="space-y-0.5">
+            {SUPPORT_MENUS.map((menu) =>
+              collapsed ? (
+                <Tooltip key={menu.to}>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <MenuItem menu={menu} collapsed={collapsed} />
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">{menu.label}</TooltipContent>
+                </Tooltip>
+              ) : (
+                <MenuItem key={menu.to} menu={menu} collapsed={collapsed} />
+              ),
+            )}
           </div>
         </div>
       </nav>
 
-      {/* Footer */}
-      <div className="border-t border-border space-y-2 p-4">
+      {/* ── Footer ── */}
+      <div className="border-t border-sidebar-border px-3 py-3 space-y-2">
         {/* User card */}
         {user && (
           <div
-            className={`rounded-lg bg-muted/50 ${collapsed ? "p-2" : "p-3 space-y-3"}`}
+            className={`rounded-xl border border-border/50 bg-card/40 ${
+              collapsed ? "p-2 flex justify-center" : "p-3"
+            }`}
             title={collapsed ? user.name : undefined}
           >
-            <div
-              className={`flex items-center gap-2 ${collapsed ? "justify-center" : ""}`}
-            >
-              <Avatar size={collapsed ? "sm" : "default"}>
-                <AvatarFallback className="text-xs font-semibold">
+            {collapsed ? (
+              <Avatar size="sm">
+                <AvatarFallback className="text-[10px] font-semibold bg-primary/10 text-primary">
                   {getInitials(user.name)}
                 </AvatarFallback>
               </Avatar>
-              {!collapsed && (
-                <>
+            ) : (
+              <div className="space-y-2.5">
+                <div className="flex items-center gap-2.5">
+                  <Avatar size="sm">
+                    <AvatarFallback className="text-[10px] font-bold bg-linear-to-br from-indigo-500/20 to-violet-500/20 text-primary">
+                      {getInitials(user.name)}
+                    </AvatarFallback>
+                  </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold truncate">
+                    <p className="text-xs font-semibold truncate text-foreground">
                       {user.name}
                     </p>
-                    <p className="text-xs text-muted-foreground truncate">
+                    <p className="text-[10px] text-muted-foreground/60 truncate">
                       {ROLE_LABELS[user.role] ?? user.role}
                     </p>
                   </div>
-                  <ChevronRight className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                </>
-              )}
-            </div>
+                  <ChevronRight className="h-3 w-3 text-muted-foreground/30 shrink-0" />
+                </div>
 
-            {/* Online indicator */}
-            {!collapsed && (
-              <div className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-xs text-muted-foreground">
-                  Online · {user.email}
-                </span>
+                <div className="flex items-center gap-1.5 pl-0.5">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-50" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  </span>
+                  <span className="text-[10px] text-muted-foreground/50 truncate">
+                    {user.email}
+                  </span>
+                </div>
               </div>
             )}
           </div>
         )}
 
-        <Separator />
-
-        {/* Logout button */}
+        {/* Sign out */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               variant="ghost"
               onClick={handleLogout}
               disabled={isLoading}
-              className={`w-full text-destructive hover:text-destructive hover:bg-destructive/10 ${
-                collapsed ? "justify-center px-2" : "justify-start gap-2"
-              }`}
               size="sm"
+              className={`w-full text-muted-foreground/60 hover:text-destructive hover:bg-destructive/8 transition-colors ${
+                collapsed ? "justify-center px-2" : "justify-start gap-2 px-3"
+              }`}
             >
-              <LogOut className="h-4 w-4" />
-              {!collapsed && <span>Sign Out</span>}
+              <LogOut className="h-3.5 w-3.5 shrink-0" />
+              {!collapsed && <span className="text-xs">Sign Out</span>}
             </Button>
           </TooltipTrigger>
-          {collapsed && <TooltipContent side="right">Sign Out</TooltipContent>}
+          {collapsed && (
+            <TooltipContent side="right">Sign Out</TooltipContent>
+          )}
         </Tooltip>
 
         {!collapsed && (
-          <p className="text-xs text-muted-foreground text-center">
+          <p className="text-[10px] text-muted-foreground/30 text-center pb-0.5">
             © 2026 Pathom, Inc.
           </p>
         )}

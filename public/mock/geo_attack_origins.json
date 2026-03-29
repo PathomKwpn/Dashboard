@@ -1,0 +1,17 @@
+[
+  { "country": "China",          "country_code": "CN", "lat":  35.86, "lng":  104.19, "attack_count": 1823, "threat_level": "critical", "blocked_count": 1654 },
+  { "country": "Russia",         "country_code": "RU", "lat":  61.52, "lng":   98.31, "attack_count":  982, "threat_level": "critical", "blocked_count":  834 },
+  { "country": "Ukraine",        "country_code": "UA", "lat":  48.37, "lng":   31.16, "attack_count":  421, "threat_level": "critical", "blocked_count":  367 },
+  { "country": "Iran",           "country_code": "IR", "lat":  32.42, "lng":   53.68, "attack_count":  388, "threat_level": "critical", "blocked_count":  351 },
+  { "country": "North Korea",    "country_code": "KP", "lat":  40.33, "lng":  127.51, "attack_count":  312, "threat_level": "critical", "blocked_count":  308 },
+  { "country": "United States",  "country_code": "US", "lat":  37.09, "lng":  -95.71, "attack_count":  543, "threat_level": "high",     "blocked_count":  421 },
+  { "country": "Brazil",         "country_code": "BR", "lat": -14.23, "lng":  -51.92, "attack_count":  276, "threat_level": "high",     "blocked_count":  241 },
+  { "country": "India",          "country_code": "IN", "lat":  20.59, "lng":   78.96, "attack_count":  289, "threat_level": "high",     "blocked_count":  231 },
+  { "country": "Vietnam",        "country_code": "VN", "lat":  14.05, "lng":  108.27, "attack_count":  198, "threat_level": "high",     "blocked_count":  177 },
+  { "country": "Nigeria",        "country_code": "NG", "lat":   9.08, "lng":    8.67, "attack_count":  167, "threat_level": "high",     "blocked_count":  134 },
+  { "country": "Germany",        "country_code": "DE", "lat":  51.16, "lng":   10.45, "attack_count":  187, "threat_level": "medium",   "blocked_count":  156 },
+  { "country": "Netherlands",    "country_code": "NL", "lat":  52.13, "lng":    5.29, "attack_count":  164, "threat_level": "medium",   "blocked_count":  138 },
+  { "country": "South Korea",    "country_code": "KR", "lat":  35.90, "lng":  127.76, "attack_count":  134, "threat_level": "medium",   "blocked_count":  112 },
+  { "country": "Indonesia",      "country_code": "ID", "lat":  -0.78, "lng":  113.92, "attack_count":  143, "threat_level": "medium",   "blocked_count":  119 },
+  { "country": "Romania",        "country_code": "RO", "lat":  45.94, "lng":   24.96, "attack_count":   89, "threat_level": "medium",   "blocked_count":   72 }
+]

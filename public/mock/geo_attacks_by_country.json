@@ -1,0 +1,12 @@
+[
+  { "country": "China",          "country_code": "CN", "total": 1823, "blocked": 1654, "passed": 169 },
+  { "country": "Russia",         "country_code": "RU", "total":  982, "blocked":  834, "passed": 148 },
+  { "country": "United States",  "country_code": "US", "total":  543, "blocked":  421, "passed": 122 },
+  { "country": "Ukraine",        "country_code": "UA", "total":  421, "blocked":  367, "passed":  54 },
+  { "country": "Iran",           "country_code": "IR", "total":  388, "blocked":  351, "passed":  37 },
+  { "country": "India",          "country_code": "IN", "total":  289, "blocked":  231, "passed":  58 },
+  { "country": "Brazil",         "country_code": "BR", "total":  276, "blocked":  241, "passed":  35 },
+  { "country": "Germany",        "country_code": "DE", "total":  187, "blocked":  156, "passed":  31 },
+  { "country": "Vietnam",        "country_code": "VN", "total":  198, "blocked":  177, "passed":  21 },
+  { "country": "Nigeria",        "country_code": "NG", "total":  167, "blocked":  134, "passed":  33 }
+]
