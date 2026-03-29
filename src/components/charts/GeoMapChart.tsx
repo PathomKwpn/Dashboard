@@ -10,18 +10,19 @@ import type { AttackOrigin } from "@/pages/GeoDetection/geoDetection.types";
 /* ─── Config ─────────────────────────────────────────────────────────────── */
 const GEO_URL = "/map/world-110m.json";
 
+/* Apple-inspired threat palette — restrained, professional */
 const THREAT_COLORS: Record<string, string> = {
-  critical: "#ef4444",
-  high:     "#f97316",
-  medium:   "#eab308",
-  low:      "#94a3b8",
+  critical: "#dc2626",
+  high:     "#ea580c",
+  medium:   "#d97706",
+  low:      "#6b7280",
 };
 
 const THREAT_GLOW: Record<string, string> = {
-  critical: "rgba(239,68,68,0.30)",
-  high:     "rgba(249,115,22,0.25)",
-  medium:   "rgba(234,179,8,0.20)",
-  low:      "rgba(148,163,184,0.15)",
+  critical: "rgba(220,38,38,0.12)",
+  high:     "rgba(234,88,12,0.10)",
+  medium:   "rgba(217,119,6,0.08)",
+  low:      "rgba(107,114,128,0.06)",
 };
 
 /* ─── Props ──────────────────────────────────────────────────────────────── */
@@ -32,12 +33,12 @@ interface GeoMapChartProps {
 
 /* ─── Component ──────────────────────────────────────────────────────────── */
 const GeoMapChart = ({ data, height = "400px" }: GeoMapChartProps) => {
-  const [tooltip, setTooltip]   = useState<AttackOrigin | null>(null);
+  const [tooltip, setTooltip]     = useState<AttackOrigin | null>(null);
   const [tooltipXY, setTooltipXY] = useState({ x: 0, y: 0 });
 
-  const maxCount = Math.max(...data.map((d) => d.attack_count), 1);
+  const maxCount  = Math.max(...data.map((d) => d.attack_count), 1);
   const getRadius = (count: number) =>
-    Math.max(4, Math.min(16, (count / maxCount) * 13 + 4));
+    Math.max(3.5, Math.min(14, (count / maxCount) * 11 + 3.5));
 
   const blockPct = tooltip
     ? Math.round((tooltip.blocked_count / tooltip.attack_count) * 100)
@@ -48,9 +49,9 @@ const GeoMapChart = ({ data, height = "400px" }: GeoMapChartProps) => {
       <div
         style={{
           height,
-          background: "linear-gradient(160deg, #060d1a 0%, #0a1628 60%, #060d1a 100%)",
+          background: "linear-gradient(145deg, #0c1220 0%, #111827 50%, #0c1220 100%)",
         }}
-        className="relative w-full rounded-xl overflow-hidden select-none"
+        className="relative w-full rounded-xl overflow-hidden select-none border border-white/5"
         onMouseMove={(e) => tooltip && setTooltipXY({ x: e.clientX, y: e.clientY })}
       >
         <ComposableMap
@@ -65,12 +66,12 @@ const GeoMapChart = ({ data, height = "400px" }: GeoMapChartProps) => {
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill="#0d1d35"
-                  stroke="#ffffff0b"
-                  strokeWidth={0.35}
+                  fill="#1e293b"
+                  stroke="rgba(255,255,255,0.04)"
+                  strokeWidth={0.4}
                   style={{
-                    default: { outline: "none" },
-                    hover:   { outline: "none", fill: "#122040" },
+                    default: { outline: "none", transition: "fill 0.2s ease" },
+                    hover:   { outline: "none", fill: "#334155", transition: "fill 0.2s ease" },
                     pressed: { outline: "none" },
                   }}
                 />
@@ -78,12 +79,12 @@ const GeoMapChart = ({ data, height = "400px" }: GeoMapChartProps) => {
             }
           </Geographies>
 
-          {/* ── Attack markers (render small ones first so large ones appear on top) ── */}
+          {/* ── Attack markers ── */}
           {[...data]
             .sort((a, b) => a.attack_count - b.attack_count)
             .map((origin) => {
               const r       = getRadius(origin.attack_count);
-              const color   = THREAT_COLORS[origin.threat_level] ?? "#94a3b8";
+              const color   = THREAT_COLORS[origin.threat_level] ?? "#6b7280";
               const glow    = THREAT_GLOW[origin.threat_level]   ?? "transparent";
               const isPulse = origin.threat_level === "critical" || origin.threat_level === "high";
 
@@ -97,47 +98,50 @@ const GeoMapChart = ({ data, height = "400px" }: GeoMapChartProps) => {
                   }}
                   onMouseLeave={() => setTooltip(null)}
                 >
-                  {/* Animated pulse ring for critical / high */}
+                  {/* Subtle pulse for critical / high */}
                   {isPulse && (
                     <circle r={r} fill={color} opacity={0}>
                       <animate
                         attributeName="r"
-                        values={`${r};${r * 2.8}`}
-                        dur="2s"
+                        values={`${r};${r * 2}`}
+                        dur="3s"
                         repeatCount="indefinite"
                       />
                       <animate
                         attributeName="opacity"
-                        values="0.30;0"
-                        dur="2s"
+                        values="0.15;0"
+                        dur="3s"
                         repeatCount="indefinite"
                       />
                     </circle>
                   )}
 
-                  {/* Soft halo */}
+                  {/* Ambient glow */}
                   <circle
-                    r={r * 2}
+                    r={r * 1.5}
                     fill={glow}
-                    opacity={0.6}
+                    opacity={0.5}
                     style={{ pointerEvents: "none" }}
                   />
 
-                  {/* Core dot */}
+                  {/* Core marker */}
                   <circle
                     r={r}
                     fill={color}
-                    opacity={0.88}
-                    style={{ cursor: "pointer", transition: "r 0.15s" }}
+                    opacity={0.9}
+                    style={{
+                      cursor: "pointer",
+                      transition: "r 0.2s ease",
+                    }}
                   />
 
-                  {/* Specular highlight */}
+                  {/* Inner highlight ring */}
                   <circle
-                    r={r * 0.35}
-                    cx={-r * 0.28}
-                    cy={-r * 0.28}
-                    fill="white"
-                    opacity={0.30}
+                    r={r * 0.45}
+                    fill="none"
+                    stroke="white"
+                    strokeWidth={0.4}
+                    opacity={0.2}
                     style={{ pointerEvents: "none" }}
                   />
                 </Marker>
@@ -145,77 +149,85 @@ const GeoMapChart = ({ data, height = "400px" }: GeoMapChartProps) => {
             })}
         </ComposableMap>
 
-        {/* ── Threat level legend ── */}
-        <div className="absolute bottom-3 left-3 bg-black/55 backdrop-blur-sm rounded-lg px-3 py-2.5 space-y-1.5">
-          <p className="text-[9px] uppercase tracking-widest text-white/30 mb-1">Threat Level</p>
+        {/* ── Threat legend ── */}
+        <div className="absolute bottom-3.5 left-3.5 bg-black/50 backdrop-blur-md rounded-lg px-3.5 py-3 space-y-1.5 border border-white/6">
+          <p className="text-[10px] font-medium tracking-wide text-slate-400 mb-2">Threat Level</p>
           {(["critical", "high", "medium", "low"] as const).map((level) => (
             <div key={level} className="flex items-center gap-2">
               <div
                 className="h-2 w-2 rounded-full shrink-0"
-                style={{
-                  background: THREAT_COLORS[level],
-                  boxShadow: `0 0 4px ${THREAT_COLORS[level]}88`,
-                }}
+                style={{ background: THREAT_COLORS[level] }}
               />
-              <span className="text-[10px] capitalize text-white/55">{level}</span>
+              <span className="text-[11px] capitalize text-slate-300">{level}</span>
             </div>
           ))}
         </div>
 
-        {/* ── Dot size legend ── */}
-        <div className="absolute top-3 right-3 flex items-center gap-3">
-          {([["Low", 7], ["Med", 11], ["High", 16]] as [string, number][]).map(([label, size]) => (
-            <div key={label} className="flex items-center gap-1.5">
-              <div
-                className="rounded-full bg-white/20"
-                style={{ width: size, height: size }}
-              />
-              <span className="text-[9px] text-white/30">{label}</span>
-            </div>
-          ))}
+        {/* ── Volume legend ── */}
+        <div className="absolute top-3.5 right-3.5 bg-black/50 backdrop-blur-md rounded-lg px-3.5 py-3 border border-white/6">
+          <p className="text-[10px] font-medium tracking-wide text-slate-400 mb-2">Volume</p>
+          <div className="space-y-1.5">
+            {([["Low", 5], ["Med", 9], ["High", 13]] as [string, number][]).map(([label, size]) => (
+              <div key={label} className="flex items-center gap-2">
+                <div
+                  className="rounded-full bg-white/15"
+                  style={{ width: size, height: size }}
+                />
+                <span className="text-[11px] text-slate-300">{label}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* ── Footer info ── */}
-        <div className="absolute bottom-3 right-3 text-[9px] font-mono text-white/15 tracking-wide">
-          Equal Earth · {data.length} origins
+        {/* ── Footer ── */}
+        <div className="absolute bottom-3.5 right-3.5 text-[10px] font-mono text-slate-500">
+          {data.length} origins
         </div>
       </div>
 
-      {/* ── Floating tooltip ── */}
+      {/* ── Tooltip ── */}
       {tooltip && (
         <div
-          className="fixed z-200 pointer-events-none bg-zinc-900/95 border border-white/10
-                     rounded-xl px-4 py-3 shadow-2xl backdrop-blur-sm min-w-45"
-          style={{ left: tooltipXY.x + 16, top: tooltipXY.y - 16 }}
+          className="fixed z-200 pointer-events-none bg-gray-900/95 border border-white/8
+                     rounded-xl px-4 py-3.5 shadow-2xl backdrop-blur-lg min-w-52"
+          style={{ left: tooltipXY.x + 14, top: tooltipXY.y - 14 }}
         >
-          <div className="flex items-center gap-2 mb-2">
+          {/* Header */}
+          <div className="flex items-center gap-2 mb-3 pb-2.5 border-b border-white/8">
             <div
               className="h-2.5 w-2.5 rounded-full shrink-0"
               style={{ background: THREAT_COLORS[tooltip.threat_level] }}
             />
-            <p className="text-sm font-semibold text-foreground/95">{tooltip.country}</p>
+            <div>
+              <p className="text-sm font-semibold text-white">{tooltip.country}</p>
+              <p className="text-[10px] text-slate-400 capitalize">{tooltip.threat_level} threat</p>
+            </div>
           </div>
-          <div className="space-y-1">
-            <div className="flex justify-between gap-6 text-xs">
-              <span className="text-muted-foreground/60">Total Attacks</span>
-              <span className="tabular-nums font-medium text-foreground/90">
+
+          {/* Stats */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] text-slate-400">Attacks</span>
+              <span className="tabular-nums text-sm font-medium text-white">
                 {tooltip.attack_count.toLocaleString()}
               </span>
             </div>
-            <div className="flex justify-between gap-6 text-xs">
-              <span className="text-muted-foreground/60">Blocked</span>
-              <span className="tabular-nums font-medium text-emerald-400">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] text-slate-400">Blocked</span>
+              <span className="tabular-nums text-sm font-medium text-emerald-400">
                 {tooltip.blocked_count.toLocaleString()}
               </span>
             </div>
-            <div className="flex justify-between gap-6 text-xs">
-              <span className="text-muted-foreground/60">Block Rate</span>
-              <span className="tabular-nums font-medium text-sky-400">{blockPct}%</span>
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] text-slate-400">Block Rate</span>
+              <span className="tabular-nums text-sm font-medium text-blue-400">{blockPct}%</span>
             </div>
           </div>
-          <div className="mt-2.5 h-1 w-full rounded-full bg-white/10 overflow-hidden">
+
+          {/* Progress bar */}
+          <div className="mt-3 h-1 w-full rounded-full bg-white/8 overflow-hidden">
             <div
-              className="h-full rounded-full bg-emerald-500/70"
+              className="h-full rounded-full bg-emerald-500/60"
               style={{ width: `${blockPct}%` }}
             />
           </div>

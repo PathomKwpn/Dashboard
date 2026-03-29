@@ -11,8 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import type { EventTimeSeries, LogLevelItem } from "../dashboard.types";
 
-// Muted *-400 palette — less saturated, easier on the eyes
-const LEVEL_COLORS = ["#f87171", "#fb923c", "#fbbf24", "#4ade80", "#94a3b8"];
+const LEVEL_COLORS = ["#ef4444", "#f97316", "#f59e0b", "#22c55e", "#94a3b8"];
 
 interface DashboardChartSectionProps {
   timeAxis: string[];
@@ -33,11 +32,11 @@ const DashboardChartSection = ({
   const avg24h  = timeSeries.length > 0 ? timeSeries[timeSeries.length - 1]?.avg_24h : null;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* ── Log Volume Trend ── */}
-      <Card className="lg:col-span-2 gap-0 py-0 border border-border/50 shadow-xs">
+      <Card className="lg:col-span-2 gap-0 py-0 border-border/40 shadow-sm">
         <CardHeader className="gap-0 px-5 pt-5 pb-0">
-          <CardTitle className="text-sm">Log Volume Trend</CardTitle>
+          <CardTitle className="text-sm font-semibold">Log Volume Trend</CardTitle>
           <CardDescription className="text-xs mt-0.5">
             Events vs. 24-hour rolling average
           </CardDescription>
@@ -45,7 +44,7 @@ const DashboardChartSection = ({
             <Button
               variant="ghost"
               size="icon-sm"
-              className="text-muted-foreground/30 hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground"
             >
               <ArrowUpRight className="h-3.5 w-3.5" />
             </Button>
@@ -53,7 +52,7 @@ const DashboardChartSection = ({
         </CardHeader>
 
         {/* Stats strip */}
-        <div className="px-5 pt-3.5 pb-2 flex items-center gap-5 border-b border-border/30">
+        <div className="px-5 pt-4 pb-2 flex items-center gap-6 border-b border-border/30">
           {[
             { label: "Peak",    val: peak    },
             { label: "Min",     val: min     },
@@ -61,14 +60,14 @@ const DashboardChartSection = ({
             { label: "24h Avg", val: avg24h  },
           ].map(({ label, val }) => (
             <div key={label}>
-              <p className="text-[10px] uppercase tracking-wide text-muted-foreground/60">{label}</p>
+              <p className="text-[10px] font-medium text-muted-foreground">{label}</p>
               <p className="text-sm font-semibold tabular-nums mt-0.5">
-                {val !== null ? val!.toLocaleString() : "—"}
+                {val !== null ? val!.toLocaleString() : "\u2014"}
               </p>
             </div>
           ))}
           <div className="ml-auto text-right">
-            <p className="text-[10px] uppercase tracking-wide text-muted-foreground/60">Points</p>
+            <p className="text-[10px] font-medium text-muted-foreground">Points</p>
             <p className="text-sm font-semibold tabular-nums mt-0.5">{timeSeries.length}</p>
           </div>
         </div>
@@ -82,7 +81,7 @@ const DashboardChartSection = ({
                 data: timeSeries.map((d) => d.events),
                 smooth: true,
                 color: "#818cf8",
-                areaColor: ["rgba(129,140,248,0.14)", "rgba(129,140,248,0.01)"],
+                areaColor: ["rgba(129,140,248,0.12)", "rgba(129,140,248,0.01)"],
               },
               {
                 name: "24h Average",
@@ -97,19 +96,19 @@ const DashboardChartSection = ({
       </Card>
 
       {/* ── Log Level Distribution ── */}
-      <Card className="gap-0 py-0 flex flex-col border border-border/50 shadow-xs">
+      <Card className="gap-0 py-0 flex flex-col border-border/40 shadow-sm">
         <CardHeader className="gap-0 px-5 pt-5 pb-3">
-          <CardTitle className="text-sm">Log Level Distribution</CardTitle>
+          <CardTitle className="text-sm font-semibold">Log Level Distribution</CardTitle>
           <CardDescription className="text-xs mt-0.5">Breakdown by severity</CardDescription>
           <CardAction>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold tabular-nums text-muted-foreground/70">
+              <span className="text-xs font-semibold tabular-nums text-muted-foreground">
                 {totalLogs.toLocaleString()}
               </span>
               <Button
                 variant="ghost"
                 size="icon-sm"
-                className="text-muted-foreground/30 hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground"
               >
                 <ArrowUpRight className="h-3.5 w-3.5" />
               </Button>
@@ -129,18 +128,18 @@ const DashboardChartSection = ({
         </CardContent>
 
         {/* Legend */}
-        <div className="px-5 pb-5 pt-1 space-y-1.5">
+        <div className="px-5 pb-5 pt-2 space-y-2">
           {logLevelDistribution.map((d, i) => {
             const pct = totalLogs > 0 ? ((d.value / totalLogs) * 100).toFixed(1) : "0.0";
             return (
               <div key={d.name} className="flex items-center gap-2">
                 <span
-                  className="h-1.5 w-1.5 rounded-sm shrink-0"
+                  className="h-2 w-2 rounded-sm shrink-0"
                   style={{ background: LEVEL_COLORS[i % LEVEL_COLORS.length] }}
                 />
-                <span className="text-xs text-muted-foreground/70 flex-1">{d.name}</span>
+                <span className="text-xs text-muted-foreground flex-1">{d.name}</span>
                 <span className="text-xs font-medium tabular-nums">{pct}%</span>
-                <span className="text-[11px] text-muted-foreground/50 tabular-nums w-12 text-right">
+                <span className="text-[11px] text-muted-foreground tabular-nums w-12 text-right">
                   {d.value.toLocaleString()}
                 </span>
               </div>

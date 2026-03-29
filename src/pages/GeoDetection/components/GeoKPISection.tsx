@@ -7,7 +7,7 @@ interface Props { summary: GeoSummary; }
 const GeoKPISection = ({ summary }: Props) => {
   const c = summary.changes ?? {};
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       <KPICard
         label="Detection Events"
         value={summary.total_events.toLocaleString()}

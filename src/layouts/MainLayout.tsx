@@ -10,17 +10,14 @@ const MainLayout = () => {
 
   return (
     <div className="flex h-screen bg-background">
-      {/* Sidebar */}
       <Sidebar
         collapsed={isSidebarCollapsed}
         onToggle={() => setIsSidebarCollapsed((prev) => !prev)}
       />
 
       <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Header */}
         <Header />
-        {/* Content */}
-        <main className="flex-1 overflow-y-auto bg-muted/40">
+        <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
       </div>

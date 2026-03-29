@@ -14,7 +14,6 @@ import AttackByCountryChart from "./components/AttackByCountryChart";
 import SuspiciousIPTable    from "./components/SuspiciousIPTable";
 import DetectionEventsTable from "./components/DetectionEventsTable";
 
-/* ─── Page ───────────────────────────────────────────────────────────── */
 const GeoDetectionPage = () => {
   const dispatch = useAppDispatch();
   const {
@@ -50,29 +49,32 @@ const GeoDetectionPage = () => {
   }
 
   return (
-    <div className="min-h-full">
+    <div className="min-h-full bg-background">
       {/* ── Page header ── */}
-      <div className="border-b border-border/30">
-        <div className="max-w-screen-2xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="border-b border-border/40">
+        <div className="max-w-screen-2xl mx-auto px-6 py-5 flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-semibold tracking-tight text-foreground">
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">
               Geo Detection
             </h1>
-            <p className="text-xs text-muted-foreground/60 mt-0.5">
-              Geographic threat intelligence — real-time attack origin mapping
+            <p className="text-sm text-muted-foreground mt-0.5">
+              Geographic threat intelligence and real-time attack origin mapping
             </p>
           </div>
 
           {summary && (
-            <div className="hidden md:flex items-center gap-4 text-xs text-muted-foreground/60">
-              <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Live
+            <div className="hidden md:flex items-center gap-4 text-xs text-muted-foreground">
+              <span className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-50" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                </span>
+                <span className="font-medium">Live</span>
               </span>
-              <span className="w-px h-4 bg-border/40" />
+              <span className="w-px h-5 bg-border" />
               <span>
                 Last updated{" "}
-                <span className="text-foreground/70 tabular-nums">
+                <span className="text-foreground tabular-nums font-medium">
                   {new Date(summary.last_updated).toLocaleTimeString()}
                 </span>
               </span>
@@ -82,21 +84,20 @@ const GeoDetectionPage = () => {
       </div>
 
       {/* ── Content ── */}
-      <div className="max-w-screen-2xl mx-auto px-6 py-5 space-y-4">
-        {/* KPI row */}
+      <div className="max-w-screen-2xl mx-auto px-6 py-6 space-y-5">
         {summary && (
           <GeoKPISection summary={summary} />
         )}
         {summaryLoading && !summary && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-28 rounded-xl border border-border/40 bg-card animate-pulse" />
+              <div key={i} className="h-32 rounded-xl border border-border/40 bg-card animate-pulse" />
             ))}
           </div>
         )}
 
-        {/* Map + Country chart — side by side on large screens */}
-        <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
+        {/* Map + Country chart */}
+        <div className="grid grid-cols-1 xl:grid-cols-5 gap-5">
           <div className="xl:col-span-3">
             <GeoMapSection data={attackOrigins} loading={originsLoading} />
           </div>
@@ -105,10 +106,7 @@ const GeoDetectionPage = () => {
           </div>
         </div>
 
-        {/* Suspicious IPs table */}
         <SuspiciousIPTable data={suspiciousIPs} loading={ipsLoading} />
-
-        {/* Detection events table */}
         <DetectionEventsTable data={detectionEvents} loading={eventsLoading} />
       </div>
     </div>

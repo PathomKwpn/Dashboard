@@ -24,37 +24,36 @@ interface Props {
   alerts: RecentAlert[];
 }
 
-// Dark-toned: translucent backgrounds + *-400 text
 const severityVariant: Record<
   RiskLevel,
   { label: string; cls: string; accent: string }
 > = {
   critical: {
     label: "Critical",
-    cls: "bg-red-500/10 text-red-400",
-    accent: "border-l-red-500/50",
+    cls: "bg-red-500/8 text-red-600 dark:text-red-400",
+    accent: "border-l-red-500/40",
   },
   high: {
     label: "High",
-    cls: "bg-orange-500/10 text-orange-400",
-    accent: "border-l-orange-500/50",
+    cls: "bg-orange-500/8 text-orange-600 dark:text-orange-400",
+    accent: "border-l-orange-500/40",
   },
   medium: {
     label: "Medium",
-    cls: "bg-amber-500/10 text-amber-400",
-    accent: "border-l-amber-400/50",
+    cls: "bg-amber-500/8 text-amber-600 dark:text-amber-400",
+    accent: "border-l-amber-400/40",
   },
   low: {
     label: "Low",
-    cls: "bg-muted/50 text-muted-foreground",
-    accent: "border-l-border/40",
+    cls: "bg-muted text-muted-foreground",
+    accent: "border-l-border",
   },
 };
 
 const statusStyle: Record<AlertStatus, { label: string; cls: string }> = {
-  open: { label: "Open", cls: "text-red-400" },
-  ack: { label: "Acknowledged", cls: "text-sky-400" },
-  resolved: { label: "Resolved", cls: "text-emerald-400" },
+  open: { label: "Open", cls: "text-red-600 dark:text-red-400" },
+  ack: { label: "Acknowledged", cls: "text-sky-600 dark:text-sky-400" },
+  resolved: { label: "Resolved", cls: "text-emerald-600 dark:text-emerald-400" },
 };
 
 const DashboardAlertsTable = ({ alerts }: Props) => {
@@ -63,34 +62,32 @@ const DashboardAlertsTable = ({ alerts }: Props) => {
   const resolvedCount = alerts.filter((a) => a.status === "resolved").length;
 
   return (
-    <Card className="gap-0 py-0 border border-border/50 shadow-xs">
+    <Card className="gap-0 py-0 border-border/40 shadow-sm">
       <CardHeader className="gap-0 px-5 pt-5 pb-4">
-        <CardTitle className="text-sm">Recent Alerts</CardTitle>
+        <CardTitle className="text-sm font-semibold">Recent Alerts</CardTitle>
         <CardDescription className="text-xs mt-0.5">
           Latest security and anomaly events
         </CardDescription>
         <CardAction>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 text-[11px] text-muted-foreground/60">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-red-500/70" />
+                <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
                 {openCount} open
               </span>
-              <span className="text-border/50">·</span>
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-sky-400/70" />
+                <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
                 {ackCount} ack
               </span>
-              <span className="text-border/50">·</span>
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/70" />
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                 {resolvedCount} resolved
               </span>
             </div>
             <Button
               variant="ghost"
               size="icon-sm"
-              className="text-muted-foreground/30 hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground"
             >
               <ArrowUpRight className="h-3.5 w-3.5" />
             </Button>
@@ -101,7 +98,7 @@ const DashboardAlertsTable = ({ alerts }: Props) => {
       <CardContent className="px-0 pb-0">
         <Table>
           <TableHeader>
-            <TableRow className="hover:bg-transparent border-y border-border/30 bg-muted/20">
+            <TableRow className="hover:bg-transparent border-y border-border/30 bg-muted/30">
               {[
                 "ID",
                 "Time",
@@ -113,7 +110,7 @@ const DashboardAlertsTable = ({ alerts }: Props) => {
               ].map((h) => (
                 <TableHead
                   key={h}
-                  className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/40 px-4 h-8"
+                  className="text-[11px] font-medium text-muted-foreground px-4 h-9"
                 >
                   {h}
                 </TableHead>
@@ -127,12 +124,12 @@ const DashboardAlertsTable = ({ alerts }: Props) => {
               return (
                 <TableRow
                   key={alert.id}
-                  className={`border-l-2 ${sv.accent} hover:bg-muted/15 border-border/20 transition-colors`}
+                  className={`border-l-2 ${sv.accent} hover:bg-muted/30 border-border/20 transition-colors`}
                 >
-                  <TableCell className="px-4 py-2.5 font-mono text-[11px] text-muted-foreground/50">
+                  <TableCell className="px-4 py-2.5 font-mono text-[11px] text-muted-foreground">
                     {alert.id}
                   </TableCell>
-                  <TableCell className="px-4 py-2.5 text-xs text-muted-foreground/70 whitespace-nowrap">
+                  <TableCell className="px-4 py-2.5 text-xs text-muted-foreground whitespace-nowrap">
                     {moment(alert.timestamp).format("MMM DD, HH:mm")}
                   </TableCell>
                   <TableCell className="px-4 py-2.5">
@@ -147,7 +144,7 @@ const DashboardAlertsTable = ({ alerts }: Props) => {
                     {alert.source_ip}
                   </TableCell>
                   <TableCell className="px-4 py-2.5">
-                    <span className="font-mono text-xs text-muted-foreground/70">
+                    <span className="font-mono text-xs text-muted-foreground">
                       {alert.service}
                     </span>
                   </TableCell>

@@ -33,7 +33,7 @@ const AttackByCountryChart = ({ data, loading }: Props) => {
       grid: { left: 12, right: 20, top: 8, bottom: 8, containLabel: true },
       xAxis: {
         type: "value",
-        splitLine: { lineStyle: { color: "#ffffff0a" } },
+        splitLine: { lineStyle: { color: "rgba(255,255,255,0.04)" } },
         axisLabel: { color: "#64748b", fontSize: 10 },
         axisLine: { show: false },
         axisTick: { show: false },
@@ -43,46 +43,46 @@ const AttackByCountryChart = ({ data, loading }: Props) => {
         data: countries,
         axisLine: { show: false },
         axisTick: { show: false },
-        axisLabel: { color: "#94a3b8", fontSize: 11, fontFamily: "monospace" },
+        axisLabel: { color: "#94a3b8", fontSize: 11, fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif" },
       },
       series: [
         {
           name: "Blocked",
           type: "bar",
           stack: "total",
-          barMaxWidth: 14,
+          barMaxWidth: 12,
           data: blocked,
           itemStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-              { offset: 0, color: "rgba(34,197,94,0.25)" },
-              { offset: 1, color: "rgba(34,197,94,0.55)" },
+              { offset: 0, color: "rgba(34,197,94,0.20)" },
+              { offset: 1, color: "rgba(34,197,94,0.50)" },
             ]),
             borderRadius: [0, 0, 0, 0],
           },
-          emphasis: { itemStyle: { color: "rgba(34,197,94,0.70)" } },
+          emphasis: { itemStyle: { color: "rgba(34,197,94,0.65)" } },
         },
         {
           name: "Passed",
           type: "bar",
           stack: "total",
-          barMaxWidth: 14,
+          barMaxWidth: 12,
           data: passed,
           itemStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-              { offset: 0, color: "rgba(239,68,68,0.25)" },
-              { offset: 1, color: "rgba(239,68,68,0.55)" },
+              { offset: 0, color: "rgba(239,68,68,0.20)" },
+              { offset: 1, color: "rgba(239,68,68,0.50)" },
             ]),
             borderRadius: [0, 3, 3, 0],
           },
-          emphasis: { itemStyle: { color: "rgba(239,68,68,0.70)" } },
+          emphasis: { itemStyle: { color: "rgba(239,68,68,0.65)" } },
         },
       ],
       tooltip: {
         trigger: "axis",
         axisPointer: { type: "shadow" },
         backgroundColor: "rgba(15,23,42,0.95)",
-        borderColor: "rgba(255,255,255,0.08)",
-        textStyle: { color: "#e2e8f0", fontSize: 11 },
+        borderColor: "rgba(255,255,255,0.06)",
+        textStyle: { color: "#e2e8f0", fontSize: 11, fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif" },
         formatter: (params: echarts.TooltipComponentFormatterCallbackParams) => {
           if (!Array.isArray(params)) return "";
           const [b, p] = params as { value: number; seriesName: string }[];
@@ -91,7 +91,7 @@ const AttackByCountryChart = ({ data, loading }: Props) => {
           return `<div style="font-weight:600;margin-bottom:6px">${(params[0] as any)?.axisValue}</div>
             <div>Blocked: <b style="color:#4ade80">${(b?.value ?? 0).toLocaleString()}</b></div>
             <div>Passed: <b style="color:#f87171">${(p?.value ?? 0).toLocaleString()}</b></div>
-            <div style="margin-top:4px;color:#94a3b8">Block rate: <b style="color:#38bdf8">${rate}%</b></div>`;
+            <div style="margin-top:4px;color:#94a3b8">Block rate: <b style="color:#60a5fa">${rate}%</b></div>`;
         },
       },
       legend: {
@@ -100,8 +100,8 @@ const AttackByCountryChart = ({ data, loading }: Props) => {
         itemWidth: 10,
         itemHeight: 8,
         data: [
-          { name: "Blocked", itemStyle: { color: "rgba(34,197,94,0.50)" } },
-          { name: "Passed",  itemStyle: { color: "rgba(239,68,68,0.50)" } },
+          { name: "Blocked", itemStyle: { color: "rgba(34,197,94,0.45)" } },
+          { name: "Passed",  itemStyle: { color: "rgba(239,68,68,0.45)" } },
         ],
       },
     });
@@ -115,9 +115,9 @@ const AttackByCountryChart = ({ data, loading }: Props) => {
   }, [data]);
 
   return (
-    <Card className="border border-border/50 shadow-xs gap-0 py-0">
+    <Card className="border-border/40 shadow-sm gap-0 py-0">
       <CardHeader className="gap-0 px-5 pt-5 pb-3">
-        <CardTitle className="text-sm">Attacks by Country</CardTitle>
+        <CardTitle className="text-sm font-semibold">Attacks by Country</CardTitle>
         <CardDescription className="text-xs mt-0.5">
           Top 10 origin countries — blocked vs. passed
         </CardDescription>
@@ -125,7 +125,7 @@ const AttackByCountryChart = ({ data, loading }: Props) => {
           <Button
             variant="ghost"
             size="icon-sm"
-            className="text-muted-foreground/30 hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground"
           >
             <ArrowUpRight className="h-3.5 w-3.5" />
           </Button>

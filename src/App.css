@@ -44,75 +44,90 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/*
+ * Apple-inspired design system
+ * - SF Pro system font stack
+ * - Restrained neutral palette with purposeful accent
+ * - Generous whitespace, subtle depth
+ * - 0.625rem base radius (10px) — Apple's signature rounded corners
+ */
+
 :root {
-  --radius: 0.5rem;
-  /* Light mode — cool off-white base, indigo primary */
-  --background: oklch(0.972 0.006 240);
-  --foreground: oklch(0.12 0.01 258);
+  --radius: 0.625rem;
+
+  /* Light — warm gray base, blue accent (Apple HIG) */
+  --background: oklch(0.985 0.002 240);
+  --foreground: oklch(0.14 0.005 260);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.12 0.01 258);
+  --card-foreground: oklch(0.14 0.005 260);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.12 0.01 258);
-  --primary: oklch(0.46 0.20 263);
+  --popover-foreground: oklch(0.14 0.005 260);
+  --primary: oklch(0.55 0.19 260);
   --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.955 0.006 240);
-  --secondary-foreground: oklch(0.2 0.01 258);
-  --muted: oklch(0.955 0.006 240);
-  --muted-foreground: oklch(0.50 0.01 250);
-  --accent: oklch(0.945 0.008 240);
-  --accent-foreground: oklch(0.2 0.01 258);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.898 0.009 240);
-  --input: oklch(0.898 0.009 240);
-  --ring: oklch(0.46 0.20 263);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.962 0.007 240);
-  --sidebar-foreground: oklch(0.12 0.01 258);
-  --sidebar-primary: oklch(0.46 0.20 263);
+  --secondary: oklch(0.965 0.003 260);
+  --secondary-foreground: oklch(0.25 0.005 260);
+  --muted: oklch(0.965 0.003 260);
+  --muted-foreground: oklch(0.55 0.01 255);
+  --accent: oklch(0.96 0.004 260);
+  --accent-foreground: oklch(0.25 0.005 260);
+  --destructive: oklch(0.55 0.22 25);
+  --border: oklch(0.92 0.004 260);
+  --input: oklch(0.92 0.004 260);
+  --ring: oklch(0.55 0.19 260);
+
+  /* Charts — muted, harmonious palette */
+  --chart-1: oklch(0.55 0.19 260);
+  --chart-2: oklch(0.62 0.14 165);
+  --chart-3: oklch(0.65 0.16 45);
+  --chart-4: oklch(0.58 0.20 305);
+  --chart-5: oklch(0.60 0.18 15);
+
+  /* Sidebar — slightly cooler than content */
+  --sidebar: oklch(0.98 0.003 260);
+  --sidebar-foreground: oklch(0.14 0.005 260);
+  --sidebar-primary: oklch(0.55 0.19 260);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.942 0.009 240);
-  --sidebar-accent-foreground: oklch(0.2 0.01 258);
-  --sidebar-border: oklch(0.898 0.009 240);
-  --sidebar-ring: oklch(0.46 0.20 263);
+  --sidebar-accent: oklch(0.955 0.005 260);
+  --sidebar-accent-foreground: oklch(0.25 0.005 260);
+  --sidebar-border: oklch(0.92 0.004 260);
+  --sidebar-ring: oklch(0.55 0.19 260);
 }
 
 .dark {
-  /* Dark mode — deep navy-charcoal base, indigo primary */
-  --background: oklch(0.098 0.013 258);
-  --foreground: oklch(0.94 0.006 240);
-  --card: oklch(0.136 0.011 258);
-  --card-foreground: oklch(0.94 0.006 240);
-  --popover: oklch(0.158 0.011 258);
-  --popover-foreground: oklch(0.94 0.006 240);
-  --primary: oklch(0.63 0.22 263);
+  /* Dark — deep charcoal, restrained and professional */
+  --background: oklch(0.13 0.008 260);
+  --foreground: oklch(0.93 0.005 260);
+  --card: oklch(0.16 0.007 260);
+  --card-foreground: oklch(0.93 0.005 260);
+  --popover: oklch(0.18 0.007 260);
+  --popover-foreground: oklch(0.93 0.005 260);
+  --primary: oklch(0.68 0.17 260);
   --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.192 0.013 258);
-  --secondary-foreground: oklch(0.88 0.008 240);
-  --muted: oklch(0.192 0.013 258);
-  --muted-foreground: oklch(0.60 0.01 255);
-  --accent: oklch(0.192 0.013 258);
-  --accent-foreground: oklch(0.94 0.006 240);
-  --destructive: oklch(0.704 0.191 22.216);
+  --secondary: oklch(0.20 0.008 260);
+  --secondary-foreground: oklch(0.88 0.005 260);
+  --muted: oklch(0.20 0.008 260);
+  --muted-foreground: oklch(0.56 0.008 260);
+  --accent: oklch(0.20 0.008 260);
+  --accent-foreground: oklch(0.93 0.005 260);
+  --destructive: oklch(0.65 0.20 22);
   --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 7%);
-  --ring: oklch(0.63 0.22 263);
-  --chart-1: oklch(0.63 0.22 263);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.108 0.015 258);
-  --sidebar-foreground: oklch(0.94 0.006 240);
-  --sidebar-primary: oklch(0.63 0.22 263);
+  --input: oklch(1 0 0 / 6%);
+  --ring: oklch(0.68 0.17 260);
+
+  --chart-1: oklch(0.68 0.17 260);
+  --chart-2: oklch(0.70 0.14 165);
+  --chart-3: oklch(0.72 0.16 45);
+  --chart-4: oklch(0.65 0.20 305);
+  --chart-5: oklch(0.63 0.18 15);
+
+  --sidebar: oklch(0.14 0.008 260);
+  --sidebar-foreground: oklch(0.93 0.005 260);
+  --sidebar-primary: oklch(0.68 0.17 260);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.192 0.013 258);
-  --sidebar-accent-foreground: oklch(0.94 0.006 240);
+  --sidebar-accent: oklch(0.20 0.008 260);
+  --sidebar-accent-foreground: oklch(0.93 0.005 260);
   --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.63 0.22 263);
+  --sidebar-ring: oklch(0.68 0.17 260);
 }
 
 @layer base {
@@ -121,10 +136,15 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+                 "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: "kern" 1, "liga" 1;
+    font-feature-settings: "kern" 1, "liga" 1, "ss01" 1;
+    letter-spacing: -0.011em;
   }
+
+  /* Refined scrollbar — Apple-thin */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -133,9 +153,9 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-border rounded-full;
+    @apply bg-foreground/8 rounded-full;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/30;
+    @apply bg-foreground/15;
   }
 }

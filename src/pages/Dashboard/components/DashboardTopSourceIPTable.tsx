@@ -18,9 +18,9 @@ const DashboardTopSourceIPTable = ({ data }: Props) => {
   const max = Math.max(...data.map((d) => d.log_count), 1);
 
   return (
-    <Card className="gap-0 py-0 border border-border/50 shadow-xs">
-      <CardHeader className="gap-0 px-5 pt-4 pb-3">
-        <CardTitle className="text-sm">Top Source IPs</CardTitle>
+    <Card className="gap-0 py-0 border-border/40 shadow-sm">
+      <CardHeader className="gap-0 px-5 pt-5 pb-3">
+        <CardTitle className="text-sm font-semibold">Top Source IPs</CardTitle>
         <CardDescription className="text-xs mt-0.5">
           Highest log volume sources
         </CardDescription>
@@ -28,7 +28,7 @@ const DashboardTopSourceIPTable = ({ data }: Props) => {
           <Button
             variant="ghost"
             size="icon-sm"
-            className="text-muted-foreground/30 hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground"
           >
             <ArrowUpRight className="h-3.5 w-3.5" />
           </Button>
@@ -42,9 +42,9 @@ const DashboardTopSourceIPTable = ({ data }: Props) => {
             return (
               <div
                 key={row.source_ip}
-                className="flex items-center gap-2.5 px-5 py-2 hover:bg-muted/20 transition-colors"
+                className="flex items-center gap-3 px-5 py-2.5 hover:bg-muted/30 transition-colors"
               >
-                <span className="w-4 text-xs text-muted-foreground/40 shrink-0 text-center tabular-nums font-medium">
+                <span className="w-4 text-xs text-muted-foreground shrink-0 text-center tabular-nums font-medium">
                   {row.rank}
                 </span>
 
@@ -53,16 +53,16 @@ const DashboardTopSourceIPTable = ({ data }: Props) => {
                     <span className="font-mono text-xs text-foreground truncate">
                       {row.source_ip}
                     </span>
-                    <span className="text-[10px] text-muted-foreground/50 ml-2 shrink-0 tabular-nums">
+                    <span className="text-[11px] text-muted-foreground ml-2 shrink-0 tabular-nums">
                       {row.log_count.toLocaleString()}
                     </span>
                   </div>
-                  <div className="text-[10px] text-muted-foreground/60 mb-1.5">
+                  <div className="text-[10px] text-muted-foreground mb-1.5">
                     {row.country}
                   </div>
-                  <div className="h-0.5 w-full rounded-full bg-border/50 overflow-hidden">
+                  <div className="h-1 w-full rounded-full bg-border/40 overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-primary/60"
+                      className="h-full rounded-full bg-primary/50"
                       style={{ width: `${pct}%` }}
                     />
                   </div>

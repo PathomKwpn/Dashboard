@@ -17,16 +17,16 @@ interface Props {
 
 /* ─── Config ──────────────────────────────────────────────────────────── */
 const RISK_STYLE: Record<RiskLevel, { badge: string; dot: string }> = {
-  critical: { badge: "bg-red-500/10 text-red-400 border-red-500/20",       dot: "bg-red-500"    },
-  high:     { badge: "bg-orange-500/10 text-orange-400 border-orange-500/20", dot: "bg-orange-500" },
-  medium:   { badge: "bg-amber-500/10 text-amber-400 border-amber-500/20",  dot: "bg-amber-400"  },
-  low:      { badge: "bg-slate-500/10 text-slate-400 border-slate-500/20",  dot: "bg-slate-400"  },
+  critical: { badge: "bg-red-500/8 text-red-600 dark:text-red-400 border-red-500/15",         dot: "bg-red-500"    },
+  high:     { badge: "bg-orange-500/8 text-orange-600 dark:text-orange-400 border-orange-500/15", dot: "bg-orange-500" },
+  medium:   { badge: "bg-amber-500/8 text-amber-600 dark:text-amber-400 border-amber-500/15",  dot: "bg-amber-500"  },
+  low:      { badge: "bg-secondary text-muted-foreground border-border/40",                    dot: "bg-muted-foreground" },
 };
 
 const STATUS_CONFIG: Record<IPStatus, { icon: React.ReactNode; label: string; cls: string }> = {
-  blocked:     { icon: <ShieldOff className="h-3 w-3" />,   label: "Blocked",     cls: "bg-red-500/10 text-red-400 border-red-500/20"       },
-  monitoring:  { icon: <Eye className="h-3 w-3" />,         label: "Monitoring",  cls: "bg-sky-500/10 text-sky-400 border-sky-500/20"       },
-  whitelisted: { icon: <Shield className="h-3 w-3" />,      label: "Whitelisted", cls: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
+  blocked:     { icon: <ShieldOff className="h-3 w-3" />,   label: "Blocked",     cls: "bg-red-500/8 text-red-600 dark:text-red-400 border-red-500/15" },
+  monitoring:  { icon: <Eye className="h-3 w-3" />,         label: "Monitoring",  cls: "bg-sky-500/8 text-sky-600 dark:text-sky-400 border-sky-500/15" },
+  whitelisted: { icon: <Shield className="h-3 w-3" />,      label: "Whitelisted", cls: "bg-emerald-500/8 text-emerald-600 dark:text-emerald-400 border-emerald-500/15" },
 };
 
 const ATTACK_LABEL: Record<AttackType, string> = {
@@ -45,25 +45,25 @@ const SuspiciousIPTable = ({ data, loading }: Props) => {
   const monitoringCount = data.filter((d) => d.status === "monitoring").length;
 
   return (
-    <Card className="border border-border/50 shadow-xs gap-0 py-0">
+    <Card className="border-border/40 shadow-sm gap-0 py-0">
       <CardHeader className="gap-0 px-5 pt-5 pb-3">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <CardTitle className="text-sm flex items-center gap-2">
-              <ShieldAlert className="h-3.5 w-3.5 text-orange-400/70 shrink-0" />
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <ShieldAlert className="h-4 w-4 text-orange-500 shrink-0" />
               Suspicious IPs
             </CardTitle>
             <CardDescription className="text-xs mt-0.5">
               Top threat actors ranked by attack volume
             </CardDescription>
           </div>
-          <div className="flex items-center gap-3 shrink-0 text-[11px] text-muted-foreground/60">
-            <span className="flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-red-500/70" />
+          <div className="flex items-center gap-3 shrink-0 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
               {blockedCount} blocked
             </span>
-            <span className="flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-sky-500/70" />
+            <span className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
               {monitoringCount} monitoring
             </span>
           </div>
@@ -80,11 +80,11 @@ const SuspiciousIPTable = ({ data, loading }: Props) => {
         ) : (
           <Table>
             <TableHeader>
-              <TableRow className="hover:bg-transparent border-y border-border/30 bg-muted/20">
+              <TableRow className="hover:bg-transparent border-y border-border/30 bg-muted/30">
                 {["#", "IP Address", "Country", "Attack Type", "Threat", "Attacks", "Last Seen", "Status"].map((h, i) => (
                   <TableHead
                     key={h}
-                    className={`text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/40 px-4 h-9 ${i === 5 ? "text-right" : ""} ${i === 0 ? "w-10" : ""}`}
+                    className={`text-[11px] font-medium text-muted-foreground px-4 h-9 ${i === 5 ? "text-right" : ""} ${i === 0 ? "w-10" : ""}`}
                   >
                     {h}
                   </TableHead>
@@ -95,7 +95,7 @@ const SuspiciousIPTable = ({ data, loading }: Props) => {
             <TableBody>
               {data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-12 text-sm text-muted-foreground/50">
+                  <TableCell colSpan={8} className="text-center py-12 text-sm text-muted-foreground">
                     No suspicious IPs detected
                   </TableCell>
                 </TableRow>
@@ -104,8 +104,8 @@ const SuspiciousIPTable = ({ data, loading }: Props) => {
                   const risk   = RISK_STYLE[ip.threat_level];
                   const status = STATUS_CONFIG[ip.status];
                   return (
-                    <TableRow key={ip.source_ip} className="border-border/20 hover:bg-muted/20 transition-colors">
-                      <TableCell className="px-4 py-2.5 text-xs text-muted-foreground/40 tabular-nums font-mono w-10">
+                    <TableRow key={ip.source_ip} className="border-border/20 hover:bg-muted/30 transition-colors">
+                      <TableCell className="px-4 py-2.5 text-xs text-muted-foreground tabular-nums font-mono w-10">
                         {ip.rank}
                       </TableCell>
                       <TableCell className="px-4 py-2.5 font-mono text-xs text-foreground/80 whitespace-nowrap">
@@ -114,22 +114,22 @@ const SuspiciousIPTable = ({ data, loading }: Props) => {
                       <TableCell className="px-4 py-2.5 text-xs text-foreground/70 whitespace-nowrap">
                         <span className="flex items-center gap-1.5">
                           <span className="text-[11px]">
-                            {ip.country_code === "RU" ? "🇷🇺" :
-                             ip.country_code === "CN" ? "🇨🇳" :
-                             ip.country_code === "UA" ? "🇺🇦" :
-                             ip.country_code === "NL" ? "🇳🇱" :
-                             ip.country_code === "NG" ? "🇳🇬" :
-                             ip.country_code === "VN" ? "🇻🇳" :
-                             ip.country_code === "US" ? "🇺🇸" :
-                             ip.country_code === "FR" ? "🇫🇷" :
-                             ip.country_code === "DE" ? "🇩🇪" :
-                             ip.country_code === "JP" ? "🇯🇵" :
-                             ip.country_code === "SG" ? "🇸🇬" : "🌐"}
+                            {ip.country_code === "RU" ? "\u{1F1F7}\u{1F1FA}" :
+                             ip.country_code === "CN" ? "\u{1F1E8}\u{1F1F3}" :
+                             ip.country_code === "UA" ? "\u{1F1FA}\u{1F1E6}" :
+                             ip.country_code === "NL" ? "\u{1F1F3}\u{1F1F1}" :
+                             ip.country_code === "NG" ? "\u{1F1F3}\u{1F1EC}" :
+                             ip.country_code === "VN" ? "\u{1F1FB}\u{1F1F3}" :
+                             ip.country_code === "US" ? "\u{1F1FA}\u{1F1F8}" :
+                             ip.country_code === "FR" ? "\u{1F1EB}\u{1F1F7}" :
+                             ip.country_code === "DE" ? "\u{1F1E9}\u{1F1EA}" :
+                             ip.country_code === "JP" ? "\u{1F1EF}\u{1F1F5}" :
+                             ip.country_code === "SG" ? "\u{1F1F8}\u{1F1EC}" : "\u{1F310}"}
                           </span>
                           {ip.country}
                         </span>
                       </TableCell>
-                      <TableCell className="px-4 py-2.5 text-xs text-muted-foreground/70 whitespace-nowrap">
+                      <TableCell className="px-4 py-2.5 text-xs text-muted-foreground whitespace-nowrap">
                         {ATTACK_LABEL[ip.attack_type] ?? ip.attack_type}
                       </TableCell>
                       <TableCell className="px-4 py-2.5">
@@ -142,11 +142,11 @@ const SuspiciousIPTable = ({ data, loading }: Props) => {
                         </Badge>
                       </TableCell>
                       <TableCell className="px-4 py-2.5 text-right">
-                        <span className="font-mono text-xs font-semibold tabular-nums text-foreground/85">
+                        <span className="font-mono text-xs font-medium tabular-nums text-foreground/85">
                           {ip.attack_count.toLocaleString()}
                         </span>
                       </TableCell>
-                      <TableCell className="px-4 py-2.5 text-xs text-muted-foreground/60 whitespace-nowrap tabular-nums">
+                      <TableCell className="px-4 py-2.5 text-xs text-muted-foreground whitespace-nowrap tabular-nums">
                         {moment(ip.last_seen).fromNow()}
                       </TableCell>
                       <TableCell className="px-4 py-2.5">
