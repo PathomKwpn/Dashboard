@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
 
 interface LineChartProps {
@@ -24,13 +24,27 @@ const LineChart = ({
   height = "400px",
 }: LineChartProps) => {
   const chartRef = useRef<HTMLDivElement>(null);
+  const [isDark, setIsDark] = useState(() =>
+    document.documentElement.classList.contains("dark"),
+  );
+
+  /* Track theme changes */
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!chartRef.current) return;
 
-    const isDark = document.documentElement.classList.contains("dark");
-    const textColor = isDark ? "rgba(255,255,255,0.55)" : "rgba(0,0,0,0.45)";
-    const borderColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
+    const textColor   = isDark ? "rgba(255,255,255,0.70)" : "rgba(0,0,0,0.50)";
+    const gridColor   = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
+    const pointerColor = isDark ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.14)";
+    const tooltipBg   = isDark ? "#1c1d1f" : "#ffffff";
+    const tooltipText = isDark ? "#d1d5db" : "#374151";
 
     const chart = echarts.init(chartRef.current);
 
@@ -43,15 +57,12 @@ const LineChart = ({
         : undefined,
       tooltip: {
         trigger: "axis",
-        backgroundColor: isDark ? "#1e1e2e" : "#fff",
-        borderColor: borderColor,
+        backgroundColor: tooltipBg,
+        borderColor: gridColor,
         borderWidth: 1,
-        textStyle: {
-          color: isDark ? "#e2e8f0" : "#334155",
-          fontSize: 12,
-        },
+        textStyle: { color: tooltipText, fontSize: 12 },
         axisPointer: {
-          lineStyle: { color: borderColor, type: "dashed" },
+          lineStyle: { color: pointerColor, type: "dashed" },
         },
       },
       legend: {
@@ -82,7 +93,7 @@ const LineChart = ({
         type: "value",
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: borderColor, type: "dashed" } },
+        splitLine: { lineStyle: { color: gridColor, type: "dashed" } },
         axisLabel: { color: textColor, fontSize: 10 },
       },
       series: seriesData.map((s, i) => {
@@ -119,7 +130,7 @@ const LineChart = ({
       window.removeEventListener("resize", handleResize);
       chart.dispose();
     };
-  }, [title, xAxisData, seriesData]);
+  }, [title, xAxisData, seriesData, isDark]);
 
   return <div ref={chartRef} style={{ width: "100%", height }} />;
 };

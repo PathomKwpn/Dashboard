@@ -4,158 +4,178 @@
 @custom-variant dark (&.dark, &.dark *);
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
+  /* ── Radius scale — 6px base (Linear's button radius) ── */
+  --radius-sm: calc(var(--radius) - 4px);   /* 2px — micro badges */
+  --radius-md: calc(var(--radius) - 2px);   /* 4px — small containers */
+  --radius-lg: var(--radius);               /* 6px — buttons, inputs */
+  --radius-xl: calc(var(--radius) + 2px);   /* 8px — cards */
+  --radius-2xl: calc(var(--radius) + 6px);  /* 12px — panels */
+  --radius-3xl: calc(var(--radius) + 16px); /* 22px — large panels */
+  --radius-4xl: 9999px;                     /* pill */
+
+  --color-background:             var(--background);
+  --color-foreground:             var(--foreground);
+  --color-card:                   var(--card);
+  --color-card-foreground:        var(--card-foreground);
+  --color-popover:                var(--popover);
+  --color-popover-foreground:     var(--popover-foreground);
+  --color-primary:                var(--primary);
+  --color-primary-foreground:     var(--primary-foreground);
+  --color-secondary:              var(--secondary);
+  --color-secondary-foreground:   var(--secondary-foreground);
+  --color-muted:                  var(--muted);
+  --color-muted-foreground:       var(--muted-foreground);
+  --color-accent:                 var(--accent);
+  --color-accent-foreground:      var(--accent-foreground);
+  --color-destructive:            var(--destructive);
+  --color-border:                 var(--border);
+  --color-input:                  var(--input);
+  --color-ring:                   var(--ring);
+  --color-chart-1:                var(--chart-1);
+  --color-chart-2:                var(--chart-2);
+  --color-chart-3:                var(--chart-3);
+  --color-chart-4:                var(--chart-4);
+  --color-chart-5:                var(--chart-5);
+  --color-sidebar:                var(--sidebar);
+  --color-sidebar-foreground:     var(--sidebar-foreground);
+  --color-sidebar-primary:        var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent:         var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border:         var(--sidebar-border);
+  --color-sidebar-ring:           var(--sidebar-ring);
 }
 
 /*
- * Apple-inspired design system
- * - SF Pro system font stack
- * - Restrained neutral palette with purposeful accent
- * - Generous whitespace, subtle depth
- * - 0.625rem base radius (10px) — Apple's signature rounded corners
+ * Linear-inspired design system
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Dark-mode native: near-black canvas (#08090a) where content emerges from
+ * darkness. Achromatic except for a single brand accent: indigo-violet
+ * (#5e6ad2 / #7170ff). Semi-transparent white borders throughout.
+ * Inter Variable with cv01 + ss03 for the distinctive geometric character.
  */
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.375rem; /* 6px — Linear's comfortable button radius */
 
-  /* Light — warm gray base, blue accent (Apple HIG) */
-  --background: oklch(0.985 0.002 240);
-  --foreground: oklch(0.14 0.005 260);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.14 0.005 260);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.14 0.005 260);
-  --primary: oklch(0.55 0.19 260);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.965 0.003 260);
-  --secondary-foreground: oklch(0.25 0.005 260);
-  --muted: oklch(0.965 0.003 260);
-  --muted-foreground: oklch(0.55 0.01 255);
-  --accent: oklch(0.96 0.004 260);
-  --accent-foreground: oklch(0.25 0.005 260);
-  --destructive: oklch(0.55 0.22 25);
-  --border: oklch(0.92 0.004 260);
-  --input: oklch(0.92 0.004 260);
-  --ring: oklch(0.55 0.19 260);
+  /* ── Light ── */
+  --background:           #f7f8f8;
+  --foreground:           #0f1011;
+  --card:                 #ffffff;
+  --card-foreground:      #0f1011;
+  --popover:              #ffffff;
+  --popover-foreground:   #0f1011;
+  --primary:              #5e6ad2;
+  --primary-foreground:   #ffffff;
+  --secondary:            #f3f4f5;
+  --secondary-foreground: #191a1b;
+  --muted:                #f3f4f5;
+  --muted-foreground:     #8a8f98;
+  --accent:               #f0f1f3;
+  --accent-foreground:    #191a1b;
+  --destructive:          oklch(0.55 0.22 25);
+  --border:               #e6e6e6;
+  --input:                #d0d6e0;
+  --ring:                 #5e6ad2;
 
-  /* Charts — muted, harmonious palette */
-  --chart-1: oklch(0.55 0.19 260);
-  --chart-2: oklch(0.62 0.14 165);
-  --chart-3: oklch(0.65 0.16 45);
-  --chart-4: oklch(0.58 0.20 305);
-  --chart-5: oklch(0.60 0.18 15);
+  --chart-1:  #5e6ad2;
+  --chart-2:  #10b981;
+  --chart-3:  oklch(0.72 0.16 55);
+  --chart-4:  oklch(0.60 0.20 305);
+  --chart-5:  oklch(0.60 0.18 15);
 
-  /* Sidebar — slightly cooler than content */
-  --sidebar: oklch(0.98 0.003 260);
-  --sidebar-foreground: oklch(0.14 0.005 260);
-  --sidebar-primary: oklch(0.55 0.19 260);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.955 0.005 260);
-  --sidebar-accent-foreground: oklch(0.25 0.005 260);
-  --sidebar-border: oklch(0.92 0.004 260);
-  --sidebar-ring: oklch(0.55 0.19 260);
+  --sidebar:                      #f0f1f3;
+  --sidebar-foreground:           #191a1b;
+  --sidebar-primary:              #5e6ad2;
+  --sidebar-primary-foreground:   #ffffff;
+  --sidebar-accent:               rgba(0, 0, 0, 0.04);
+  --sidebar-accent-foreground:    #0f1011;
+  --sidebar-border:               #e6e6e6;
+  --sidebar-ring:                 #5e6ad2;
 }
 
 .dark {
-  /* Dark — deep charcoal, restrained and professional */
-  --background: oklch(0.13 0.008 260);
-  --foreground: oklch(0.93 0.005 260);
-  --card: oklch(0.16 0.007 260);
-  --card-foreground: oklch(0.93 0.005 260);
-  --popover: oklch(0.18 0.007 260);
-  --popover-foreground: oklch(0.93 0.005 260);
-  --primary: oklch(0.68 0.17 260);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.20 0.008 260);
-  --secondary-foreground: oklch(0.88 0.005 260);
-  --muted: oklch(0.20 0.008 260);
-  --muted-foreground: oklch(0.56 0.008 260);
-  --accent: oklch(0.20 0.008 260);
-  --accent-foreground: oklch(0.93 0.005 260);
-  --destructive: oklch(0.65 0.20 22);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 6%);
-  --ring: oklch(0.68 0.17 260);
+  /* ── Dark — Linear native ── */
+  /* Backgrounds step from deepest to most elevated:
+     #08090a → #0f1011 → #191a1b → #28282c              */
+  --background:           #08090a;
+  --foreground:           #f7f8f8;
+  --card:                 #191a1b;
+  --card-foreground:      #f7f8f8;
+  --popover:              #191a1b;
+  --popover-foreground:   #f7f8f8;
+  --primary:              #7170ff;
+  --primary-foreground:   #ffffff;
+  --secondary:            #191a1b;
+  --secondary-foreground: #d0d6e0;
+  --muted:                #191a1b;
+  --muted-foreground:     #8a8f98;
+  --accent:               #28282c;
+  --accent-foreground:    #f7f8f8;
+  --destructive:          oklch(0.65 0.20 22);
+  --border:               rgba(255, 255, 255, 0.08);
+  --input:                rgba(255, 255, 255, 0.06);
+  --ring:                 #7170ff;
 
-  --chart-1: oklch(0.68 0.17 260);
-  --chart-2: oklch(0.70 0.14 165);
-  --chart-3: oklch(0.72 0.16 45);
-  --chart-4: oklch(0.65 0.20 305);
-  --chart-5: oklch(0.63 0.18 15);
+  --chart-1:  #7170ff;
+  --chart-2:  #10b981;
+  --chart-3:  oklch(0.72 0.16 55);
+  --chart-4:  oklch(0.65 0.20 305);
+  --chart-5:  oklch(0.63 0.18 15);
 
-  --sidebar: oklch(0.14 0.008 260);
-  --sidebar-foreground: oklch(0.93 0.005 260);
-  --sidebar-primary: oklch(0.68 0.17 260);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.20 0.008 260);
-  --sidebar-accent-foreground: oklch(0.93 0.005 260);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.68 0.17 260);
+  /* Sidebar is one luminance step above the page canvas (#0f1011) */
+  --sidebar:                      #0f1011;
+  --sidebar-foreground:           #d0d6e0;
+  --sidebar-primary:              #7170ff;
+  --sidebar-primary-foreground:   #ffffff;
+  --sidebar-accent:               rgba(255, 255, 255, 0.05);
+  --sidebar-accent-foreground:    #f7f8f8;
+  --sidebar-border:               rgba(255, 255, 255, 0.05);
+  --sidebar-ring:                 #7170ff;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+
+    /* Inter Variable — with Linear's signature OpenType features.
+       cv01: single-story 'a'  |  ss03: cleaner geometric letterforms */
+    font-family: "Inter", "Inter Variable",
+                 -apple-system, BlinkMacSystemFont,
+                 "SF Pro Display", "SF Pro Text",
                  "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-feature-settings: "cv01", "ss03";
+    font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: "kern" 1, "liga" 1, "ss01" 1;
+
+    /* Linear's default body letter-spacing */
     letter-spacing: -0.011em;
   }
 
-  /* Refined scrollbar — Apple-thin */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-foreground/8 rounded-full;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-foreground/15;
-  }
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar        { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track  { background: transparent; }
+  ::-webkit-scrollbar-thumb  { @apply bg-foreground/10 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-foreground/20; }
+}
+
+/*
+ * ── Typography helpers ──────────────────────────────────────────────────────
+ * Linear uses aggressive negative letter-spacing at display sizes.
+ * These utilities can be applied to any heading element.
+ */
+@layer utilities {
+  /* Display sizes — compressed, authoritative */
+  .text-display-xl  { font-size: 4.5rem;   line-height: 1.00; letter-spacing: -0.022em; font-variation-settings: "wght" 510; }
+  .text-display-lg  { font-size: 4rem;     line-height: 1.00; letter-spacing: -0.022em; font-variation-settings: "wght" 510; }
+  .text-display     { font-size: 3rem;     line-height: 1.00; letter-spacing: -0.022em; font-variation-settings: "wght" 510; }
+
+  /* Signature weight 510 — Linear's between-weight emphasis */
+  .font-510  { font-variation-settings: "wght" 510; }
+  .font-590  { font-variation-settings: "wght" 590; }
 }

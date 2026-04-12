@@ -118,30 +118,51 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex bg-background">
       {/* ── Left Brand Panel ─────────────────────────────────────────────── */}
-      <div className="hidden lg:flex lg:w-[52%] relative overflow-hidden bg-[#0f172a] flex-col justify-between p-12">
-        {/* Ambient gradients — Apple-style soft blurs */}
+      <div className="hidden lg:flex lg:w-[52%] relative overflow-hidden bg-[#08090a] flex-col justify-between p-12">
+        {/* Ambient gradients — Linear indigo-violet */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-blue-600/20 blur-[120px]" />
-          <div className="absolute top-1/3 -right-20 w-80 h-80 rounded-full bg-indigo-600/15 blur-[120px]" />
-          <div className="absolute -bottom-32 left-1/4 w-96 h-96 rounded-full bg-cyan-500/10 blur-[120px]" />
+          <div
+            className="absolute -top-40 -left-40 w-96 h-96 rounded-full blur-[120px]"
+            style={{ background: "rgba(94,106,210,0.18)" }}
+          />
+          <div
+            className="absolute top-1/3 -right-20 w-80 h-80 rounded-full blur-[120px]"
+            style={{ background: "rgba(113,112,255,0.12)" }}
+          />
+          <div
+            className="absolute -bottom-32 left-1/4 w-96 h-96 rounded-full blur-[120px]"
+            style={{ background: "rgba(94,106,210,0.08)" }}
+          />
         </div>
 
-        {/* Subtle grid */}
+        {/* Subtle dot grid */}
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.025]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
-            backgroundSize: "48px 48px",
+              "radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
           }}
         />
 
         {/* Logo */}
         <div className="relative z-10 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/8 border border-white/12 text-white font-semibold text-lg backdrop-blur-sm">
+          <div
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-white font-semibold text-base"
+            style={{
+              background: "#5e6ad2",
+              fontVariationSettings: '"wght" 590',
+            }}
+          >
             P
           </div>
-          <span className="text-white text-xl font-semibold tracking-tight">
+          <span
+            className="text-[#f7f8f8] text-lg"
+            style={{
+              fontVariationSettings: '"wght" 510',
+              letterSpacing: "-0.02em",
+            }}
+          >
             Pathom
           </span>
         </div>
@@ -149,20 +170,46 @@ const LoginPage = () => {
         {/* Center content */}
         <div className="relative z-10 space-y-8">
           <div className="space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/6 border border-white/10 px-3.5 py-1.5 text-slate-300 text-xs font-medium">
+            {/* Live pill */}
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-xs"
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: "9999px",
+                color: "#d0d6e0",
+                fontVariationSettings: '"wght" 510',
+              }}
+            >
               <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-50" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-blue-400" />
+                <span
+                  className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-50"
+                  style={{ background: "#7170ff" }}
+                />
+                <span
+                  className="relative inline-flex h-1.5 w-1.5 rounded-full"
+                  style={{ background: "#7170ff" }}
+                />
               </span>
-              Security Platform v2.0
+              Dashboard v2.0
             </div>
-            <h1 className="text-4xl font-bold text-white leading-tight tracking-tight">
+
+            <h1
+              className="text-[2.75rem] leading-[1.08] text-[#f7f8f8]"
+              style={{
+                fontVariationSettings: '"wght" 510',
+                letterSpacing: "-0.035em",
+              }}
+            >
               Manage your
-              <span className="block text-blue-400">
+              <span className="block" style={{ color: "#7170ff" }}>
                 operations smarter
               </span>
             </h1>
-            <p className="text-slate-400 text-base leading-relaxed max-w-sm">
+            <p
+              className="text-base leading-relaxed max-w-sm"
+              style={{ color: "#8a8f98", letterSpacing: "-0.011em" }}
+            >
               Unified dashboard for real-time monitoring, event tracking, and
               full team collaboration — all in one place.
             </p>
@@ -172,10 +219,21 @@ const LoginPage = () => {
           <div className="space-y-3">
             {FEATURES.map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-center gap-3">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/6 border border-white/8">
-                  <Icon className="h-4 w-4 text-slate-300" />
+                <div
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                  style={{
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                  }}
+                >
+                  <Icon className="h-4 w-4" style={{ color: "#d0d6e0" }} />
                 </div>
-                <span className="text-slate-300 text-sm">{text}</span>
+                <span
+                  className="text-sm"
+                  style={{ color: "#d0d6e0", letterSpacing: "-0.011em" }}
+                >
+                  {text}
+                </span>
               </div>
             ))}
           </div>
@@ -188,15 +246,29 @@ const LoginPage = () => {
               { value: "256-bit", label: "Encryption" },
             ].map((stat) => (
               <div key={stat.label}>
-                <p className="text-white font-semibold text-lg tabular-nums">{stat.value}</p>
-                <p className="text-slate-500 text-xs">{stat.label}</p>
+                <p
+                  className="text-lg tabular-nums"
+                  style={{
+                    color: "#f7f8f8",
+                    fontVariationSettings: '"wght" 590',
+                    letterSpacing: "-0.02em",
+                  }}
+                >
+                  {stat.value}
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: "#62666d" }}>
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Footer */}
-        <div className="relative z-10 flex items-center gap-2 text-slate-600 text-xs">
+        <div
+          className="relative z-10 flex items-center gap-2 text-xs"
+          style={{ color: "#62666d" }}
+        >
           <Lock className="h-3 w-3" />
           <span>Secured with end-to-end encryption</span>
         </div>
@@ -215,7 +287,9 @@ const LoginPage = () => {
 
           {/* Header */}
           <div className="space-y-1.5">
-            <h2 className="text-2xl font-semibold text-foreground tracking-tight">Welcome back</h2>
+            <h2 className="text-2xl font-semibold text-foreground tracking-tight">
+              Welcome back
+            </h2>
             <p className="text-muted-foreground text-sm">
               Sign in to your Pathom Dashboard account
             </p>

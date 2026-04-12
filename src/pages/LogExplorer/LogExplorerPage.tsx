@@ -47,7 +47,7 @@ const LogExplorerPage = () => {
     <div className="min-h-full bg-background">
       {/* ── Page header ── */}
       <div className="border-b border-border/40">
-        <div className="max-w-screen-2xl mx-auto px-6 py-5 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-semibold tracking-tight text-foreground">
               Log Explorer
@@ -72,7 +72,7 @@ const LogExplorerPage = () => {
       </div>
 
       {/* ── Content ── */}
-      <div className="max-w-screen-2xl mx-auto px-6 py-6 space-y-4">
+      <div className="max-w-7xl mx-auto px-6 py-6 space-y-4">
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <LogSearchBar />

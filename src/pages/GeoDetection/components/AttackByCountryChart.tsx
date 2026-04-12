@@ -1,142 +1,170 @@
-import { useEffect, useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
-import * as echarts from "echarts";
 import {
-  Card, CardHeader, CardTitle, CardDescription, CardAction, CardContent,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardAction,
+  CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { AttackByCountry } from "../geoDetection.types";
 
 interface Props {
-  data:    AttackByCountry[];
+  data: AttackByCountry[];
   loading: boolean;
 }
 
+/* ── Flag emoji helper ── */
+const flag = (code: string) =>
+  code
+    .toUpperCase()
+    .split("")
+    .map((c) => String.fromCodePoint(0x1f1e0 - 0x41 + c.charCodeAt(0)))
+    .join("");
+
 const AttackByCountryChart = ({ data, loading }: Props) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const instance = useRef<echarts.ECharts | null>(null);
-
-  useEffect(() => {
-    if (!chartRef.current || data.length === 0) return;
-
-    const chart = echarts.init(chartRef.current, undefined, { renderer: "svg" });
-    instance.current = chart;
-
-    const top10     = data.slice(0, 10);
-    const countries = top10.map((d) => d.country).reverse();
-    const blocked   = top10.map((d) => d.blocked).reverse();
-    const passed    = top10.map((d) => d.passed).reverse();
-
-    chart.setOption({
-      backgroundColor: "transparent",
-      grid: { left: 12, right: 20, top: 8, bottom: 8, containLabel: true },
-      xAxis: {
-        type: "value",
-        splitLine: { lineStyle: { color: "rgba(255,255,255,0.04)" } },
-        axisLabel: { color: "#64748b", fontSize: 10 },
-        axisLine: { show: false },
-        axisTick: { show: false },
-      },
-      yAxis: {
-        type: "category",
-        data: countries,
-        axisLine: { show: false },
-        axisTick: { show: false },
-        axisLabel: { color: "#94a3b8", fontSize: 11, fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif" },
-      },
-      series: [
-        {
-          name: "Blocked",
-          type: "bar",
-          stack: "total",
-          barMaxWidth: 12,
-          data: blocked,
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-              { offset: 0, color: "rgba(34,197,94,0.20)" },
-              { offset: 1, color: "rgba(34,197,94,0.50)" },
-            ]),
-            borderRadius: [0, 0, 0, 0],
-          },
-          emphasis: { itemStyle: { color: "rgba(34,197,94,0.65)" } },
-        },
-        {
-          name: "Passed",
-          type: "bar",
-          stack: "total",
-          barMaxWidth: 12,
-          data: passed,
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-              { offset: 0, color: "rgba(239,68,68,0.20)" },
-              { offset: 1, color: "rgba(239,68,68,0.50)" },
-            ]),
-            borderRadius: [0, 3, 3, 0],
-          },
-          emphasis: { itemStyle: { color: "rgba(239,68,68,0.65)" } },
-        },
-      ],
-      tooltip: {
-        trigger: "axis",
-        axisPointer: { type: "shadow" },
-        backgroundColor: "rgba(15,23,42,0.95)",
-        borderColor: "rgba(255,255,255,0.06)",
-        textStyle: { color: "#e2e8f0", fontSize: 11, fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif" },
-        formatter: (params: echarts.TooltipComponentFormatterCallbackParams) => {
-          if (!Array.isArray(params)) return "";
-          const [b, p] = params as { value: number; seriesName: string }[];
-          const total = (b?.value ?? 0) + (p?.value ?? 0);
-          const rate  = total > 0 ? Math.round(((b?.value ?? 0) / total) * 100) : 0;
-          return `<div style="font-weight:600;margin-bottom:6px">${(params[0] as any)?.axisValue}</div>
-            <div>Blocked: <b style="color:#4ade80">${(b?.value ?? 0).toLocaleString()}</b></div>
-            <div>Passed: <b style="color:#f87171">${(p?.value ?? 0).toLocaleString()}</b></div>
-            <div style="margin-top:4px;color:#94a3b8">Block rate: <b style="color:#60a5fa">${rate}%</b></div>`;
-        },
-      },
-      legend: {
-        bottom: 0,
-        textStyle: { color: "#64748b", fontSize: 10 },
-        itemWidth: 10,
-        itemHeight: 8,
-        data: [
-          { name: "Blocked", itemStyle: { color: "rgba(34,197,94,0.45)" } },
-          { name: "Passed",  itemStyle: { color: "rgba(239,68,68,0.45)" } },
-        ],
-      },
-    });
-
-    const resize = () => chart.resize();
-    window.addEventListener("resize", resize);
-    return () => {
-      window.removeEventListener("resize", resize);
-      chart.dispose();
-    };
-  }, [data]);
+  const top10 = data.slice(0, 10);
+  const maxTotal = Math.max(...top10.map((d) => d.total), 1);
 
   return (
-    <Card className="border-border/40 shadow-sm gap-0 py-0">
-      <CardHeader className="gap-0 px-5 pt-5 pb-3">
-        <CardTitle className="text-sm font-semibold">Attacks by Country</CardTitle>
-        <CardDescription className="text-xs mt-0.5">
-          Top 10 origin countries — blocked vs. passed
-        </CardDescription>
+    <Card className="border-border/40 shadow-sm gap-0 py-0 flex flex-col h-full overflow-hidden">
+      {/* ── Header ── */}
+      <CardHeader className="gap-0 px-5 pt-5 pb-4 shrink-0">
+        <div className="flex items-start justify-between">
+          <div>
+            <CardTitle className="text-sm font-semibold">
+              Attacks by Country
+            </CardTitle>
+            <CardDescription className="text-xs mt-1">
+              Top origins — blocked vs. passed
+            </CardDescription>
+          </div>
+        </div>
+
+        {/* Legend pills */}
         <CardAction>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="text-muted-foreground hover:text-foreground"
-          >
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          </Button>
+          <div className="flex items-center gap-3 text-xs mt-3">
+            <span className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-emerald-500/80" />
+              <span className="text-muted-foreground">Blocked</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-red-500/60" />
+              <span className="text-muted-foreground">Passed</span>
+            </span>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="text-muted-foreground hover:text-foreground -mt-0.5"
+            >
+              <ArrowUpRight className="h-4 w-4" />
+            </Button>
+          </div>
         </CardAction>
       </CardHeader>
 
-      <CardContent className="px-3 pb-4">
+      {/* ── Body ── */}
+      <CardContent className="px-3 pb-4 flex-1 overflow-y-auto min-h-0">
         {loading ? (
-          <Skeleton className="w-full h-72 rounded-lg" />
+          <div className="space-y-2 px-2">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Skeleton key={i} className="h-9 w-full rounded-md" />
+            ))}
+          </div>
         ) : (
-          <div ref={chartRef} style={{ height: "320px", width: "100%" }} />
+          <ul className="divide-y divide-border/30">
+            {top10.map((row, i) => {
+              const blockRate =
+                row.total > 0 ? Math.round((row.blocked / row.total) * 100) : 0;
+              const barWidth = (row.total / maxTotal) * 100;
+              const blockedPct =
+                row.total > 0 ? (row.blocked / row.total) * 100 : 0;
+              const passedPct = 100 - blockedPct;
+
+              const rateColor =
+                blockRate >= 90
+                  ? "text-emerald-500 dark:text-emerald-400"
+                  : blockRate >= 70
+                    ? "text-amber-500 dark:text-amber-400"
+                    : "text-red-500 dark:text-red-400";
+
+              return (
+                <li
+                  key={row.country_code}
+                  className="group flex flex-col gap-1.5 px-2 py-2.5 rounded-lg hover:bg-foreground/3 transition-colors duration-100 cursor-default"
+                >
+                  {/* Top row — rank, country, total, rate */}
+                  <div className="flex items-center gap-2.5">
+                    {/* Rank */}
+                    <span
+                      className="w-4 text-right text-[11px] shrink-0 tabular-nums select-none"
+                      style={{ color: "#62666d" }}
+                    >
+                      {i + 1}
+                    </span>
+
+                    {/* Flag + name */}
+                    <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                      <span
+                        className="text-sm leading-none select-none"
+                        aria-hidden
+                      >
+                        {flag(row.country_code)}
+                      </span>
+                      <span
+                        className="text-[13px] text-foreground truncate"
+                        style={{ fontVariationSettings: '"wght" 510' }}
+                      >
+                        {row.country}
+                      </span>
+                    </div>
+
+                    {/* Total count */}
+                    <span className="text-[12px] tabular-nums text-muted-foreground shrink-0">
+                      {row.total.toLocaleString()}
+                    </span>
+
+                    {/* Block rate */}
+                    <span
+                      className={`text-[12px] tabular-nums font-medium w-10 text-right shrink-0 ${rateColor}`}
+                    >
+                      {blockRate}%
+                    </span>
+                  </div>
+
+                  {/* Progress bar — proportional width + split blocked/passed */}
+                  <div className="flex items-center gap-2.5 pl-6">
+                    <div className="flex-1 h-0.75 rounded-full overflow-hidden bg-border/40">
+                      {/* Total width scaled to maxTotal */}
+                      <div
+                        className="h-full flex rounded-full overflow-hidden"
+                        style={{ width: `${barWidth}%` }}
+                      >
+                        <div
+                          className="h-full bg-emerald-500/75 dark:bg-emerald-400/65 transition-all"
+                          style={{ width: `${blockedPct}%` }}
+                        />
+                        <div
+                          className="h-full bg-red-500/55 dark:bg-red-400/50 transition-all"
+                          style={{ width: `${passedPct}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Passed count (subtle) */}
+                    <span
+                      className="text-[11px] tabular-nums shrink-0"
+                      style={{ color: "#62666d" }}
+                    >
+                      {row.passed.toLocaleString()} passed
+                    </span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         )}
       </CardContent>
     </Card>

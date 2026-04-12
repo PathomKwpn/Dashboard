@@ -1,29 +1,19 @@
-import { useState } from "react";
-import {
-  ComposableMap,
-  Geographies,
-  Geography,
-  Marker,
-} from "react-simple-maps";
+import { useEffect, useRef } from "react";
+import * as echarts from "echarts";
+import worldGeoJson from "@/assets/world.json";
 import type { AttackOrigin } from "@/pages/GeoDetection/geoDetection.types";
 
-/* ─── Config ─────────────────────────────────────────────────────────────── */
-const GEO_URL = "/map/world-110m.json";
-
-/* Apple-inspired threat palette — restrained, professional */
+/* ─── Constants ──────────────────────────────────────────────────────────── */
 const THREAT_COLORS: Record<string, string> = {
-  critical: "#dc2626",
-  high:     "#ea580c",
-  medium:   "#d97706",
+  critical: "#ef4444",
+  high:     "#f97316",
+  medium:   "#eab308",
   low:      "#6b7280",
 };
 
-const THREAT_GLOW: Record<string, string> = {
-  critical: "rgba(220,38,38,0.12)",
-  high:     "rgba(234,88,12,0.10)",
-  medium:   "rgba(217,119,6,0.08)",
-  low:      "rgba(107,114,128,0.06)",
-};
+/* Register the pre-processed world GeoJSON once at module level */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+echarts.registerMap("world", worldGeoJson as any);
 
 /* ─── Props ──────────────────────────────────────────────────────────────── */
 interface GeoMapChartProps {
@@ -32,208 +22,179 @@ interface GeoMapChartProps {
 }
 
 /* ─── Component ──────────────────────────────────────────────────────────── */
-const GeoMapChart = ({ data, height = "400px" }: GeoMapChartProps) => {
-  const [tooltip, setTooltip]     = useState<AttackOrigin | null>(null);
-  const [tooltipXY, setTooltipXY] = useState({ x: 0, y: 0 });
+const GeoMapChart = ({ data, height = "420px" }: GeoMapChartProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const chartRef     = useRef<echarts.ECharts | null>(null);
 
-  const maxCount  = Math.max(...data.map((d) => d.attack_count), 1);
-  const getRadius = (count: number) =>
-    Math.max(3.5, Math.min(14, (count / maxCount) * 11 + 3.5));
+  /* ── Init chart ── */
+  useEffect(() => {
+    if (!containerRef.current) return;
 
-  const blockPct = tooltip
-    ? Math.round((tooltip.blocked_count / tooltip.attack_count) * 100)
-    : 0;
+    const chart = echarts.init(containerRef.current, null, {
+      renderer:         "canvas",
+      devicePixelRatio: window.devicePixelRatio ?? 1,
+    });
+    chartRef.current = chart;
+
+    const ro = new ResizeObserver(() => chart.resize());
+    ro.observe(containerRef.current);
+
+    return () => {
+      ro.disconnect();
+      chart.dispose();
+      chartRef.current = null;
+    };
+  }, []);
+
+  /* ── Update option when data changes ── */
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (!chart) return;
+
+    const maxCount = Math.max(...data.map((d) => d.attack_count), 1);
+
+    const makeScatterSeries = (level: string, effect: boolean) => ({
+      name: level.charAt(0).toUpperCase() + level.slice(1),
+      type: effect ? "effectScatter" : "scatter",
+      coordinateSystem: "geo",
+      data: data
+        .filter((d) => d.threat_level === level)
+        .map((d) => ({
+          name:         d.country,
+          value:        [d.lng, d.lat, d.attack_count],
+          blocked:      d.blocked_count,
+          threatLevel:  d.threat_level,
+        })),
+      symbolSize: (val: number[]) =>
+        Math.max(6, Math.min(22, (val[2] / maxCount) * 16 + 6)),
+      itemStyle: {
+        color:   THREAT_COLORS[level] ?? "#6b7280",
+        opacity: 0.92,
+        shadowBlur:  effect ? 12 : 6,
+        shadowColor: THREAT_COLORS[level] ?? "#6b7280",
+      },
+      ...(effect
+        ? {
+            showEffectOn: "render",
+            rippleEffect: {
+              brushType: "stroke",
+              scale:     3.5,
+              period:    4,
+              color:     THREAT_COLORS[level],
+            },
+          }
+        : {}),
+      zlevel: effect ? 2 : 1,
+    });
+
+    chart.setOption(
+      {
+        backgroundColor: "transparent",
+
+        tooltip: {
+          trigger: "item",
+          backgroundColor: "rgba(15,23,42,0.95)",
+          borderColor:     "rgba(255,255,255,0.08)",
+          borderWidth:     1,
+          padding:         [10, 14],
+          textStyle: { color: "#f8fafc", fontSize: 12 },
+          formatter: (params: Record<string, unknown>) => {
+            if (!params.data || !(params.data as Record<string, unknown>).value) return "";
+            const d = params.data as {
+              name: string;
+              value: [number, number, number];
+              blocked: number;
+              threatLevel: string;
+            };
+            const attacks  = d.value[2];
+            const blocked  = d.blocked;
+            const rate     = attacks > 0 ? Math.round((blocked / attacks) * 100) : 0;
+            const dot      = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${THREAT_COLORS[d.threatLevel]};margin-right:6px;"></span>`;
+            return `
+              <div style="min-width:160px">
+                <div style="display:flex;align-items:center;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.08);">
+                  ${dot}<span style="font-weight:600;font-size:13px">${d.name}</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="color:#94a3b8">Attacks</span>
+                  <span style="font-weight:600;font-variant-numeric:tabular-nums">${attacks.toLocaleString()}</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="color:#94a3b8">Blocked</span>
+                  <span style="color:#34d399;font-weight:600;font-variant-numeric:tabular-nums">${blocked.toLocaleString()}</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+                  <span style="color:#94a3b8">Block rate</span>
+                  <span style="color:#60a5fa;font-weight:600">${rate}%</span>
+                </div>
+                <div style="height:4px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden">
+                  <div style="height:100%;width:${rate}%;background:#10b981;border-radius:4px"></div>
+                </div>
+              </div>
+            `;
+          },
+        },
+
+        legend: {
+          show:      true,
+          bottom:    12,
+          right:     12,
+          orient:    "vertical",
+          itemWidth:  10,
+          itemHeight: 10,
+          textStyle: { color: "#94a3b8", fontSize: 11 },
+          backgroundColor: "rgba(0,0,0,0.45)",
+          borderRadius:    8,
+          padding:         [8, 12],
+          data: ["Critical", "High", "Medium", "Low"],
+        },
+
+        geo: {
+          map:    "world",
+          roam:   true,
+          zoom:   1.15,
+          center: [15, 20],
+          itemStyle: {
+            areaColor:   "#1e293b",
+            borderColor: "rgba(255,255,255,0.06)",
+            borderWidth: 0.5,
+          },
+          emphasis: {
+            itemStyle: {
+              areaColor: "#334155",
+              borderColor: "rgba(255,255,255,0.12)",
+            },
+            label: { show: false },
+          },
+          select: {
+            itemStyle: { areaColor: "#3b4f6b" },
+            label: { show: false },
+          },
+          label: { show: false },
+          zlevel: 0,
+        },
+
+        series: [
+          makeScatterSeries("critical", true),
+          makeScatterSeries("high",     false),
+          makeScatterSeries("medium",   false),
+          makeScatterSeries("low",      false),
+        ],
+      },
+      true,
+    );
+  }, [data]);
 
   return (
-    <>
-      <div
-        style={{
-          height,
-          background: "linear-gradient(145deg, #0c1220 0%, #111827 50%, #0c1220 100%)",
-        }}
-        className="relative w-full rounded-xl overflow-hidden select-none border border-white/5"
-        onMouseMove={(e) => tooltip && setTooltipXY({ x: e.clientX, y: e.clientY })}
-      >
-        <ComposableMap
-          projection="geoEqualEarth"
-          projectionConfig={{ scale: 155, center: [0, 0] }}
-          style={{ width: "100%", height: "100%" }}
-        >
-          {/* ── Country fills ── */}
-          <Geographies geography={GEO_URL}>
-            {({ geographies }) =>
-              geographies.map((geo) => (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill="#1e293b"
-                  stroke="rgba(255,255,255,0.04)"
-                  strokeWidth={0.4}
-                  style={{
-                    default: { outline: "none", transition: "fill 0.2s ease" },
-                    hover:   { outline: "none", fill: "#334155", transition: "fill 0.2s ease" },
-                    pressed: { outline: "none" },
-                  }}
-                />
-              ))
-            }
-          </Geographies>
-
-          {/* ── Attack markers ── */}
-          {[...data]
-            .sort((a, b) => a.attack_count - b.attack_count)
-            .map((origin) => {
-              const r       = getRadius(origin.attack_count);
-              const color   = THREAT_COLORS[origin.threat_level] ?? "#6b7280";
-              const glow    = THREAT_GLOW[origin.threat_level]   ?? "transparent";
-              const isPulse = origin.threat_level === "critical" || origin.threat_level === "high";
-
-              return (
-                <Marker
-                  key={origin.country_code}
-                  coordinates={[origin.lng, origin.lat]}
-                  onMouseEnter={(e) => {
-                    setTooltip(origin);
-                    setTooltipXY({ x: e.clientX, y: e.clientY });
-                  }}
-                  onMouseLeave={() => setTooltip(null)}
-                >
-                  {/* Subtle pulse for critical / high */}
-                  {isPulse && (
-                    <circle r={r} fill={color} opacity={0}>
-                      <animate
-                        attributeName="r"
-                        values={`${r};${r * 2}`}
-                        dur="3s"
-                        repeatCount="indefinite"
-                      />
-                      <animate
-                        attributeName="opacity"
-                        values="0.15;0"
-                        dur="3s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-                  )}
-
-                  {/* Ambient glow */}
-                  <circle
-                    r={r * 1.5}
-                    fill={glow}
-                    opacity={0.5}
-                    style={{ pointerEvents: "none" }}
-                  />
-
-                  {/* Core marker */}
-                  <circle
-                    r={r}
-                    fill={color}
-                    opacity={0.9}
-                    style={{
-                      cursor: "pointer",
-                      transition: "r 0.2s ease",
-                    }}
-                  />
-
-                  {/* Inner highlight ring */}
-                  <circle
-                    r={r * 0.45}
-                    fill="none"
-                    stroke="white"
-                    strokeWidth={0.4}
-                    opacity={0.2}
-                    style={{ pointerEvents: "none" }}
-                  />
-                </Marker>
-              );
-            })}
-        </ComposableMap>
-
-        {/* ── Threat legend ── */}
-        <div className="absolute bottom-3.5 left-3.5 bg-black/50 backdrop-blur-md rounded-lg px-3.5 py-3 space-y-1.5 border border-white/6">
-          <p className="text-[10px] font-medium tracking-wide text-slate-400 mb-2">Threat Level</p>
-          {(["critical", "high", "medium", "low"] as const).map((level) => (
-            <div key={level} className="flex items-center gap-2">
-              <div
-                className="h-2 w-2 rounded-full shrink-0"
-                style={{ background: THREAT_COLORS[level] }}
-              />
-              <span className="text-[11px] capitalize text-slate-300">{level}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* ── Volume legend ── */}
-        <div className="absolute top-3.5 right-3.5 bg-black/50 backdrop-blur-md rounded-lg px-3.5 py-3 border border-white/6">
-          <p className="text-[10px] font-medium tracking-wide text-slate-400 mb-2">Volume</p>
-          <div className="space-y-1.5">
-            {([["Low", 5], ["Med", 9], ["High", 13]] as [string, number][]).map(([label, size]) => (
-              <div key={label} className="flex items-center gap-2">
-                <div
-                  className="rounded-full bg-white/15"
-                  style={{ width: size, height: size }}
-                />
-                <span className="text-[11px] text-slate-300">{label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Footer ── */}
-        <div className="absolute bottom-3.5 right-3.5 text-[10px] font-mono text-slate-500">
-          {data.length} origins
-        </div>
-      </div>
-
-      {/* ── Tooltip ── */}
-      {tooltip && (
-        <div
-          className="fixed z-200 pointer-events-none bg-gray-900/95 border border-white/8
-                     rounded-xl px-4 py-3.5 shadow-2xl backdrop-blur-lg min-w-52"
-          style={{ left: tooltipXY.x + 14, top: tooltipXY.y - 14 }}
-        >
-          {/* Header */}
-          <div className="flex items-center gap-2 mb-3 pb-2.5 border-b border-white/8">
-            <div
-              className="h-2.5 w-2.5 rounded-full shrink-0"
-              style={{ background: THREAT_COLORS[tooltip.threat_level] }}
-            />
-            <div>
-              <p className="text-sm font-semibold text-white">{tooltip.country}</p>
-              <p className="text-[10px] text-slate-400 capitalize">{tooltip.threat_level} threat</p>
-            </div>
-          </div>
-
-          {/* Stats */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] text-slate-400">Attacks</span>
-              <span className="tabular-nums text-sm font-medium text-white">
-                {tooltip.attack_count.toLocaleString()}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] text-slate-400">Blocked</span>
-              <span className="tabular-nums text-sm font-medium text-emerald-400">
-                {tooltip.blocked_count.toLocaleString()}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] text-slate-400">Block Rate</span>
-              <span className="tabular-nums text-sm font-medium text-blue-400">{blockPct}%</span>
-            </div>
-          </div>
-
-          {/* Progress bar */}
-          <div className="mt-3 h-1 w-full rounded-full bg-white/8 overflow-hidden">
-            <div
-              className="h-full rounded-full bg-emerald-500/60"
-              style={{ width: `${blockPct}%` }}
-            />
-          </div>
-        </div>
-      )}
-    </>
+    <div
+      style={{
+        height,
+        background: "linear-gradient(145deg, #0c1220 0%, #111827 50%, #0c1220 100%)",
+      }}
+      className="relative w-full rounded-xl overflow-hidden border border-white/5"
+    >
+      <div ref={containerRef} className="w-full h-full" />
+    </div>
   );
 };
 

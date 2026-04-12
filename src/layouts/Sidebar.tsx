@@ -25,25 +25,25 @@ import {
 
 const GENERAL_MENUS = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
-  { label: "Messages",  to: "/messages",  icon: MessageSquare, badge: 8 },
+  { label: "Messages", to: "/messages", icon: MessageSquare, badge: 8 },
 ];
 
 const TOOLS_MENUS = [
-  { label: "Events",        to: "/events",        icon: AlertTriangle },
-  { label: "Log Explorer",  to: "/log-explorer",  icon: ScrollText    },
-  { label: "Geo Detection", to: "/geo-detection", icon: Globe         },
+  { label: "Events", to: "/events", icon: AlertTriangle },
+  { label: "Log Explorer", to: "/log-explorer", icon: ScrollText },
+  { label: "Geo Detection", to: "/geo-detection", icon: Globe },
 ];
 
 const SUPPORT_MENUS = [
-  { label: "Settings", to: "/settings", icon: Settings  },
-  { label: "Security", to: "/security", icon: Lock      },
-  { label: "Help",     to: "/help",     icon: HelpCircle },
+  { label: "Settings", to: "/settings", icon: Settings },
+  { label: "Security", to: "/security", icon: Lock },
+  { label: "Help", to: "/help", icon: HelpCircle },
 ];
 
 const ROLE_LABELS: Record<string, string> = {
-  admin:    "Administrator",
+  admin: "Administrator",
   business: "Business",
-  user:     "User",
+  user: "User",
 };
 
 /* ─── Nav item ──────────────────────────────────────────────────────────── */
@@ -136,7 +136,7 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
                 Pathom
               </span>
               <span className="block text-[10px] text-muted-foreground font-normal leading-none mt-0.5">
-                Security Platform
+                Dashboard
               </span>
             </div>
           )}
@@ -253,16 +253,6 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
                   </div>
                   <ChevronRight className="h-3 w-3 text-muted-foreground/40 shrink-0" />
                 </div>
-
-                <div className="flex items-center gap-1.5 pl-0.5">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-50" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  </span>
-                  <span className="text-[10px] text-muted-foreground truncate">
-                    {user.email}
-                  </span>
-                </div>
               </div>
             )}
           </div>
@@ -283,16 +273,8 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
               {!collapsed && <span className="text-xs">Sign Out</span>}
             </Button>
           </TooltipTrigger>
-          {collapsed && (
-            <TooltipContent side="right">Sign Out</TooltipContent>
-          )}
+          {collapsed && <TooltipContent side="right">Sign Out</TooltipContent>}
         </Tooltip>
-
-        {!collapsed && (
-          <p className="text-[10px] text-muted-foreground/40 text-center pb-0.5">
-            2026 Pathom, Inc.
-          </p>
-        )}
       </div>
     </aside>
   );

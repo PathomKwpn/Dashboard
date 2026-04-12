@@ -23,7 +23,7 @@ function AppContent() {
         {/* Public route */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Protected routes */}
+        {/* Protected routes (includes 404) */}
         <Route
           element={
             <ProtectedRoute>
@@ -34,12 +34,12 @@ function AppContent() {
           {routes.map(({ path, element }) => (
             <Route key={path} path={path} element={element()} />
           ))}
+          {/* 404 — inside layout so sidebar/header stay visible */}
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
 
         {/* Default redirect */}
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        {/* 404 – catch all unknown paths */}
-        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
