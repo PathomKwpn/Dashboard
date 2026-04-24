@@ -1,0 +1,43 @@
+{
+  "total_logs": 2847412,
+  "by_severity": [
+    { "name": "Info",     "value": 1702480, "color": "#38bdf8" },
+    { "name": "Debug",    "value": 712182,  "color": "#94a3b8" },
+    { "name": "Warning",  "value": 284741,  "color": "#f59e0b" },
+    { "name": "Error",    "value": 113896,  "color": "#f97316" },
+    { "name": "Critical", "value": 34113,   "color": "#ef4444" }
+  ],
+  "by_service": [
+    { "service": "auth-service",         "critical": 5200, "error": 18500, "warning": 42000, "info": 450000, "debug": 280000 },
+    { "service": "api-gateway",          "critical": 2100, "error": 12300, "warning": 38000, "info": 520000, "debug": 195000 },
+    { "service": "user-service",         "critical": 1800, "error": 9800,  "warning": 31000, "info": 380000, "debug": 165000 },
+    { "service": "payment-service",      "critical": 6800, "error": 22100, "warning": 48000, "info": 310000, "debug": 120000 },
+    { "service": "notification-service", "critical": 900,  "error": 5200,  "warning": 21000, "info": 142000, "debug": 82000  }
+  ],
+  "hourly": [
+    { "hour": "00:00", "critical": 420,  "error": 1820, "warning": 5200,  "info": 48200,  "debug": 18400 },
+    { "hour": "01:00", "critical": 310,  "error": 1540, "warning": 4610,  "info": 41800,  "debug": 15900 },
+    { "hour": "02:00", "critical": 890,  "error": 1380, "warning": 4280,  "info": 39500,  "debug": 14800 },
+    { "hour": "03:00", "critical": 1120, "error": 1290, "warning": 4010,  "info": 37200,  "debug": 13900 },
+    { "hour": "04:00", "critical": 980,  "error": 1420, "warning": 4350,  "info": 40100,  "debug": 15200 },
+    { "hour": "05:00", "critical": 520,  "error": 1610, "warning": 4780,  "info": 44300,  "debug": 16800 },
+    { "hour": "06:00", "critical": 380,  "error": 2010, "warning": 5890,  "info": 55600,  "debug": 21200 },
+    { "hour": "07:00", "critical": 290,  "error": 2840, "warning": 7920,  "info": 78900,  "debug": 29800 },
+    { "hour": "08:00", "critical": 480,  "error": 3950, "warning": 11200, "info": 118000, "debug": 44500 },
+    { "hour": "09:00", "critical": 560,  "error": 4820, "warning": 13400, "info": 142000, "debug": 53800 },
+    { "hour": "10:00", "critical": 620,  "error": 5410, "warning": 15100, "info": 161000, "debug": 60900 },
+    { "hour": "11:00", "critical": 590,  "error": 5120, "warning": 14300, "info": 152000, "debug": 57600 },
+    { "hour": "12:00", "critical": 510,  "error": 4390, "warning": 12300, "info": 131000, "debug": 49500 },
+    { "hour": "13:00", "critical": 580,  "error": 4980, "warning": 13900, "info": 148000, "debug": 56100 },
+    { "hour": "14:00", "critical": 640,  "error": 5290, "warning": 14700, "info": 157000, "debug": 59400 },
+    { "hour": "15:00", "critical": 600,  "error": 4970, "warning": 13800, "info": 147000, "debug": 55700 },
+    { "hour": "16:00", "critical": 550,  "error": 4530, "warning": 12700, "info": 135000, "debug": 51200 },
+    { "hour": "17:00", "critical": 490,  "error": 3920, "warning": 11000, "info": 117000, "debug": 44200 },
+    { "hour": "18:00", "critical": 420,  "error": 3120, "warning": 8700,  "info": 92400,  "debug": 35000 },
+    { "hour": "19:00", "critical": 380,  "error": 2580, "warning": 7200,  "info": 76800,  "debug": 29100 },
+    { "hour": "20:00", "critical": 350,  "error": 2240, "warning": 6280,  "info": 66700,  "debug": 25200 },
+    { "hour": "21:00", "critical": 330,  "error": 2010, "warning": 5690,  "info": 60500,  "debug": 22900 },
+    { "hour": "22:00", "critical": 310,  "error": 1860, "warning": 5180,  "info": 55100,  "debug": 20900 },
+    { "hour": "23:00", "critical": 280,  "error": 1720, "warning": 4840,  "info": 51200,  "debug": 19400 }
+  ]
+}

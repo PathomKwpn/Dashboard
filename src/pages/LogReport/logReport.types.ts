@@ -86,3 +86,16 @@ export type ExportConfig = {
   severities: string[];
   max_rows: number;
 };
+
+/* ─── Redux State ────────────────────────────────────────────────────────── */
+export type LogReportState = {
+  reports:             Report[];
+  errorSummary:        ErrorSummaryData | null;
+  trafficSummary:      TrafficSummaryData | null;
+  logDistribution:     LogDistributionData | null;
+  reportsLoading:      boolean;
+  errorSummaryLoading: boolean;
+  trafficLoading:      boolean;
+  distributionLoading: boolean;
+  error?:              string;
+};

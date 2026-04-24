@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
 import { Activity, Zap, TrendingUp } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import LineChart from "@/components/charts/LineChart";
-import { fetchTrafficSummary } from "../logReport.mock";
-import type { TrafficSummaryData } from "../logReport.types";
+import { useAppSelector } from "@/store/hooks";
 
 const KPICard = ({
   label, value, sub, icon: Icon, iconCls,
@@ -34,12 +32,7 @@ const METHOD_BG: Record<string, string> = {
 };
 
 const TrafficSummary = () => {
-  const [data, setData]       = useState<TrafficSummaryData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchTrafficSummary().then((d) => { setData(d); setLoading(false); });
-  }, []);
+  const { trafficSummary: data, trafficLoading: loading, error } = useAppSelector((s) => s.logReport);
 
   if (loading) {
     return (
@@ -53,13 +46,20 @@ const TrafficSummary = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div className="px-3 py-2 rounded-lg bg-red-500/8 border border-red-500/20 text-[11px] text-red-400">
+        {error}
+      </div>
+    );
+  }
+
   if (!data) return null;
 
   const totalByMethod = data.by_method.reduce((s, m) => s + m.count, 0);
 
   return (
     <div className="space-y-4">
-      {/* KPI row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <KPICard
           label="Total Requests"
@@ -86,7 +86,6 @@ const TrafficSummary = () => {
         />
       </div>
 
-      {/* Traffic over time */}
       <Card className="border-border shadow-none gap-0 py-0">
         <CardHeader className="px-5 pt-4 pb-3 border-b border-border/30 gap-0">
           <CardTitle className="text-[13px] font-590 leading-none">Requests Over Time</CardTitle>
@@ -95,16 +94,15 @@ const TrafficSummary = () => {
           <LineChart
             xAxisData={data.hourly.map((h) => h.hour)}
             seriesData={[
-              { name: "Total",  data: data.hourly.map((h) => h.total), color: "#7170ff", areaColor: ["rgba(113,112,255,0.12)", "rgba(113,112,255,0.01)"] },
-              { name: "GET",    data: data.hourly.map((h) => h.get),   color: "#10b981" },
-              { name: "POST",   data: data.hourly.map((h) => h.post),  color: "#f59e0b" },
+              { name: "Total", data: data.hourly.map((h) => h.total), color: "#7170ff", areaColor: ["rgba(113,112,255,0.12)", "rgba(113,112,255,0.01)"] },
+              { name: "GET",   data: data.hourly.map((h) => h.get),   color: "#10b981" },
+              { name: "POST",  data: data.hourly.map((h) => h.post),  color: "#f59e0b" },
             ]}
             height="240px"
           />
         </CardContent>
       </Card>
 
-      {/* Method breakdown */}
       <Card className="border-border shadow-none gap-0 py-0">
         <CardHeader className="px-5 pt-4 pb-3 border-b border-border/30 gap-0">
           <CardTitle className="text-[13px] font-590 leading-none">Request Method Breakdown</CardTitle>

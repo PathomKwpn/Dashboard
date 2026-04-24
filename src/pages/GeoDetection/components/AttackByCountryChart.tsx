@@ -16,13 +16,21 @@ interface Props {
   loading: boolean;
 }
 
-/* ── Flag emoji helper ── */
-const flag = (code: string) =>
-  code
-    .toUpperCase()
-    .split("")
-    .map((c) => String.fromCodePoint(0x1f1e0 - 0x41 + c.charCodeAt(0)))
-    .join("");
+/* ── Flag image helper ── */
+const FlagImg = ({ code }: { code: string }) => (
+  <img
+    src={`https://flagcdn.com/w20/${code.toLowerCase()}.png`}
+    srcSet={`https://flagcdn.com/w40/${code.toLowerCase()}.png 2x`}
+    width={20}
+    height={15}
+    alt={code}
+    className="rounded-sm shrink-0 object-cover"
+    style={{ imageRendering: "crisp-edges" }}
+    onError={(e) => {
+      (e.currentTarget as HTMLImageElement).style.display = "none";
+    }}
+  />
+);
 
 const AttackByCountryChart = ({ data, loading }: Props) => {
   const top10 = data.slice(0, 10);
@@ -107,12 +115,7 @@ const AttackByCountryChart = ({ data, loading }: Props) => {
 
                     {/* Flag + name */}
                     <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                      <span
-                        className="text-sm leading-none select-none"
-                        aria-hidden
-                      >
-                        {flag(row.country_code)}
-                      </span>
+                      <FlagImg code={row.country_code} />
                       <span
                         className="text-[13px] text-foreground truncate"
                         style={{ fontVariationSettings: '"wght" 510' }}

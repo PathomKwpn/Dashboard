@@ -1,0 +1,38 @@
+{
+  "total_requests": 574230,
+  "avg_rps": 6.64,
+  "peak_rps": 42.1,
+  "peak_hour": "10:00",
+  "hourly": [
+    { "hour": "00:00", "total": 4820,  "get": 2651,  "post": 1205, "put": 578,  "delete": 386  },
+    { "hour": "01:00", "total": 4210,  "get": 2316,  "post": 1053, "put": 505,  "delete": 336  },
+    { "hour": "02:00", "total": 3980,  "get": 2189,  "post": 995,  "put": 478,  "delete": 318  },
+    { "hour": "03:00", "total": 3760,  "get": 2068,  "post": 940,  "put": 451,  "delete": 301  },
+    { "hour": "04:00", "total": 4050,  "get": 2228,  "post": 1013, "put": 486,  "delete": 323  },
+    { "hour": "05:00", "total": 4640,  "get": 2552,  "post": 1160, "put": 557,  "delete": 371  },
+    { "hour": "06:00", "total": 6820,  "get": 3751,  "post": 1705, "put": 818,  "delete": 546  },
+    { "hour": "07:00", "total": 11430, "get": 6287,  "post": 2858, "put": 1372, "delete": 913  },
+    { "hour": "08:00", "total": 17850, "get": 9818,  "post": 4463, "put": 2142, "delete": 1427 },
+    { "hour": "09:00", "total": 21640, "get": 11902, "post": 5410, "put": 2597, "delete": 1731 },
+    { "hour": "10:00", "total": 24380, "get": 13409, "post": 6095, "put": 2926, "delete": 1950 },
+    { "hour": "11:00", "total": 23110, "get": 12711, "post": 5778, "put": 2773, "delete": 1848 },
+    { "hour": "12:00", "total": 19870, "get": 10929, "post": 4968, "put": 2384, "delete": 1589 },
+    { "hour": "13:00", "total": 22490, "get": 12370, "post": 5623, "put": 2699, "delete": 1798 },
+    { "hour": "14:00", "total": 23760, "get": 13068, "post": 5940, "put": 2851, "delete": 1901 },
+    { "hour": "15:00", "total": 22150, "get": 12183, "post": 5538, "put": 2658, "delete": 1771 },
+    { "hour": "16:00", "total": 20340, "get": 11187, "post": 5085, "put": 2441, "delete": 1627 },
+    { "hour": "17:00", "total": 17620, "get": 9691,  "post": 4405, "put": 2114, "delete": 1410 },
+    { "hour": "18:00", "total": 12440, "get": 6842,  "post": 3110, "put": 1493, "delete": 995  },
+    { "hour": "19:00", "total": 9180,  "get": 5049,  "post": 2295, "put": 1102, "delete": 734  },
+    { "hour": "20:00", "total": 7630,  "get": 4197,  "post": 1908, "put": 916,  "delete": 609  },
+    { "hour": "21:00", "total": 6540,  "get": 3597,  "post": 1635, "put": 785,  "delete": 523  },
+    { "hour": "22:00", "total": 5810,  "get": 3196,  "post": 1453, "put": 697,  "delete": 464  },
+    { "hour": "23:00", "total": 5080,  "get": 2794,  "post": 1270, "put": 610,  "delete": 406  }
+  ],
+  "by_method": [
+    { "method": "GET",    "count": 315827, "color": "#7170ff" },
+    { "method": "POST",   "count": 143558, "color": "#10b981" },
+    { "method": "PUT",    "count": 68908,  "color": "#f59e0b" },
+    { "method": "DELETE", "count": 45937,  "color": "#ef4444" }
+  ]
+}

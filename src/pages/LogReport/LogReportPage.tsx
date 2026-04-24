@@ -1,28 +1,40 @@
-import { useState } from "react";
-import ReportList     from "./components/ReportList";
-import ErrorSummary   from "./components/ErrorSummary";
-import TrafficSummary from "./components/TrafficSummary";
+import { useEffect, useState } from "react";
+import { useAppDispatch } from "@/store/hooks";
+import {
+  fetchReports,
+  fetchErrorSummary,
+  fetchTrafficSummary,
+  fetchLogDistribution,
+} from "./logReport.thunks";
+import ReportList      from "./components/ReportList";
+import ErrorSummary    from "./components/ErrorSummary";
+import TrafficSummary  from "./components/TrafficSummary";
 import LogDistribution from "./components/LogDistribution";
-import ExportPanel    from "./components/ExportPanel";
+import ExportPanel     from "./components/ExportPanel";
 
-/* ─── Tab definition ─────────────────────────────────────────────────────── */
 const TABS = [
-  { id: "reports",     label: "Report List"      },
-  { id: "errors",      label: "Error Summary"    },
-  { id: "traffic",     label: "Traffic Summary"  },
-  { id: "distribution",label: "Log Distribution" },
-  { id: "export",      label: "Export"           },
+  { id: "reports",      label: "Report List"      },
+  { id: "errors",       label: "Error Summary"    },
+  { id: "traffic",      label: "Traffic Summary"  },
+  { id: "distribution", label: "Log Distribution" },
+  { id: "export",       label: "Export"           },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
 
-/* ─── Page ───────────────────────────────────────────────────────────────── */
 const LogReportPage = () => {
+  const dispatch = useAppDispatch();
   const [tab, setTab] = useState<TabId>("reports");
+
+  useEffect(() => {
+    dispatch(fetchReports());
+    dispatch(fetchErrorSummary());
+    dispatch(fetchTrafficSummary());
+    dispatch(fetchLogDistribution());
+  }, [dispatch]);
 
   return (
     <div className="min-h-full bg-background">
-      {/* Page header */}
       <div className="border-b border-border/40">
         <div className="max-w-7xl mx-auto px-6 py-5">
           <h1 className="text-xl font-semibold tracking-tight text-foreground">Log Report</h1>
@@ -32,7 +44,6 @@ const LogReportPage = () => {
         </div>
       </div>
 
-      {/* Tab navigation */}
       <div className="border-b border-border/40 bg-background">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex gap-0">
@@ -53,7 +64,6 @@ const LogReportPage = () => {
         </div>
       </div>
 
-      {/* Tab content */}
       <div className="max-w-7xl mx-auto px-6 py-6">
         {tab === "reports"      && <ReportList />}
         {tab === "errors"       && <ErrorSummary />}

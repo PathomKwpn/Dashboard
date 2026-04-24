@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
 import { TrendingDown, TrendingUp, AlertTriangle, Percent, Server } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import BarChart from "@/components/charts/BarChart";
-import { fetchErrorSummary } from "../logReport.mock";
-import type { ErrorSummaryData } from "../logReport.types";
+import { useAppSelector } from "@/store/hooks";
 
 /* ─── KPI card ───────────────────────────────────────────────────────────── */
 const KPICard = ({
@@ -36,12 +34,7 @@ const KPICard = ({
 
 /* ─── Component ──────────────────────────────────────────────────────────── */
 const ErrorSummary = () => {
-  const [data, setData]       = useState<ErrorSummaryData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchErrorSummary().then((d) => { setData(d); setLoading(false); });
-  }, []);
+  const { errorSummary: data, errorSummaryLoading: loading, error } = useAppSelector((s) => s.logReport);
 
   if (loading) {
     return (
@@ -55,11 +48,18 @@ const ErrorSummary = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div className="px-3 py-2 rounded-lg bg-red-500/8 border border-red-500/20 text-[11px] text-red-400">
+        {error}
+      </div>
+    );
+  }
+
   if (!data) return null;
 
   return (
     <div className="space-y-4">
-      {/* KPI row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <KPICard
           label="Total Errors"
@@ -85,7 +85,6 @@ const ErrorSummary = () => {
         />
       </div>
 
-      {/* Hourly bar chart */}
       <Card className="border-border shadow-none gap-0 py-0">
         <CardHeader className="px-5 pt-4 pb-3 border-b border-border/30 gap-0">
           <CardTitle className="text-[13px] font-590 leading-none">Hourly Error Count</CardTitle>
@@ -99,7 +98,6 @@ const ErrorSummary = () => {
         </CardContent>
       </Card>
 
-      {/* By service */}
       <Card className="border-border shadow-none gap-0 py-0">
         <CardHeader className="px-5 pt-4 pb-3 border-b border-border/30 gap-0">
           <CardTitle className="text-[13px] font-590 leading-none">Errors by Service</CardTitle>
@@ -126,7 +124,6 @@ const ErrorSummary = () => {
         </CardContent>
       </Card>
 
-      {/* By type */}
       <Card className="border-border shadow-none gap-0 py-0">
         <CardHeader className="px-5 pt-4 pb-3 border-b border-border/30 gap-0">
           <CardTitle className="text-[13px] font-590 leading-none">Error Type Breakdown</CardTitle>

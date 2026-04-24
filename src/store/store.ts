@@ -5,6 +5,7 @@ import eventsReducer       from "@/pages/Events/events.slice";
 import authReducer         from "@/pages/Auth/auth.slice";
 import logExplorerReducer  from "@/pages/LogExplorer/logExplorer.slice";
 import geoDetectionReducer from "@/pages/GeoDetection/geoDetection.slice";
+import logReportReducer    from "@/pages/LogReport/logReport.slice";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     events:       eventsReducer,
     logExplorer:  logExplorerReducer,
     geoDetection: geoDetectionReducer,
+    logReport:    logReportReducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
