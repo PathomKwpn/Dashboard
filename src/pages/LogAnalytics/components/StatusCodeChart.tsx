@@ -1,20 +1,13 @@
-import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import PieChart from "@/components/charts/PieChart";
 import BarChart from "@/components/charts/BarChart";
-import { fetchStatusCodes } from "../logAnalytics.mock";
-import type { StatusCodeData } from "../logAnalytics.types";
+import { useAppSelector } from "@/store/hooks";
 
 const StatusCodeChart = () => {
-  const [data, setData]       = useState<StatusCodeData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { statusCodes: data, statusCodesLoading: loading } = useAppSelector((s) => s.logAnalytics);
 
-  useEffect(() => {
-    fetchStatusCodes().then((d) => { setData(d); setLoading(false); });
-  }, []);
-
-  if (loading) {
+  if (loading || !data) {
     return (
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
@@ -25,8 +18,6 @@ const StatusCodeChart = () => {
       </div>
     );
   }
-
-  if (!data) return null;
 
   return (
     <div className="space-y-4">

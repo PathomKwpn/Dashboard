@@ -1,4 +1,5 @@
 import axios from "axios";
+import { CHARTS_API } from "@/config/endpoints";
 
 export interface KPIMetric {
   label: string;
@@ -44,6 +45,6 @@ export interface ChartsData {
 }
 
 export const getChartsData = async (): Promise<ChartsData> => {
-  const res = await axios.get("/mock/charts.json");
+  const res = await axios.get(CHARTS_API);
   return res.data;
 };

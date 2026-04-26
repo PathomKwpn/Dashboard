@@ -1,4 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import {
+  fetchErrorRateThunk,
+  fetchStatusCodesThunk,
+  fetchTopEndpointsThunk,
+  fetchSlowEndpointsThunk,
+  fetchUserAgentsThunk,
+  fetchServicePerfThunk,
+} from "./logAnalytics.thunks";
+import { Badge } from "@/components/ui/badge";
 import ErrorRateChart    from "./components/ErrorRateChart";
 import StatusCodeChart   from "./components/StatusCodeChart";
 import TopEndpointsTable from "./components/TopEndpointsTable";
@@ -20,7 +30,29 @@ type TabId = (typeof TABS)[number]["id"];
 
 /* ─── Page ───────────────────────────────────────────────────────────────── */
 const LogAnalyticsPage = () => {
+  const dispatch = useAppDispatch();
   const [tab, setTab] = useState<TabId>("error-rate");
+  const { error, errorRate, statusCodes, topEndpoints, slowEndpoints, userAgents, servicePerf } =
+    useAppSelector((s) => s.logAnalytics);
+
+  useEffect(() => {
+    if (!errorRate)               dispatch(fetchErrorRateThunk());
+    if (!statusCodes)             dispatch(fetchStatusCodesThunk());
+    if (topEndpoints.length === 0) dispatch(fetchTopEndpointsThunk());
+    if (slowEndpoints.length === 0) dispatch(fetchSlowEndpointsThunk());
+    if (userAgents.length === 0)   dispatch(fetchUserAgentsThunk());
+    if (servicePerf.length === 0)  dispatch(fetchServicePerfThunk());
+  }, [dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Badge variant="destructive" className="text-sm px-4 py-2">
+          Error: {error}
+        </Badge>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-full bg-background">

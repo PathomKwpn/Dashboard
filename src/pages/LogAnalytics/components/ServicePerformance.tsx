@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchServicePerf } from "../logAnalytics.mock";
-import type { ServicePerfRow, ServiceStatus } from "../logAnalytics.types";
+import { useAppSelector } from "@/store/hooks";
+import type { ServiceStatus } from "../logAnalytics.types";
 
 /* ─── Mini sparkline ─────────────────────────────────────────────────────── */
 const Sparkline = ({ data, color }: { data: number[]; color: string }) => {
@@ -45,12 +45,7 @@ const sparkColor = (st: ServiceStatus) => st === "critical" ? "#ef4444" : st ===
 
 /* ─── Component ──────────────────────────────────────────────────────────── */
 const ServicePerformance = () => {
-  const [data, setData]       = useState<ServicePerfRow[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchServicePerf().then((d) => { setData(d); setLoading(false); });
-  }, []);
+  const { servicePerf: data, servicePerfLoading: loading } = useAppSelector((s) => s.logAnalytics);
 
   return (
     <Card className="border-border shadow-none gap-0 py-0">

@@ -6,11 +6,17 @@ import type {
   LogDistributionData,
   ExportConfig,
 } from "@/pages/LogReport/logReport.types";
+import {
+  LOG_REPORTS_API,
+  LOG_REPORTS_ERROR_SUMMARY_API,
+  LOG_REPORTS_TRAFFIC_SUMMARY_API,
+  LOG_REPORTS_DISTRIBUTION_API,
+} from "@/config/endpoints";
 
-export const getReports         = async () => (await axios.get("/mock/log_reports.json")).data         as Report[];
-export const getErrorSummary    = async () => (await axios.get("/mock/log_error_summary.json")).data    as ErrorSummaryData;
-export const getTrafficSummary  = async () => (await axios.get("/mock/log_traffic_summary.json")).data  as TrafficSummaryData;
-export const getLogDistribution = async () => (await axios.get("/mock/log_distribution.json")).data     as LogDistributionData;
+export const getReports         = async () => (await axios.get(LOG_REPORTS_API)).data                 as Report[];
+export const getErrorSummary    = async () => (await axios.get(LOG_REPORTS_ERROR_SUMMARY_API)).data    as ErrorSummaryData;
+export const getTrafficSummary  = async () => (await axios.get(LOG_REPORTS_TRAFFIC_SUMMARY_API)).data  as TrafficSummaryData;
+export const getLogDistribution = async () => (await axios.get(LOG_REPORTS_DISTRIBUTION_API)).data     as LogDistributionData;
 
 export const triggerExport = async (_config: ExportConfig): Promise<{ job_id: string; filename: string }> => {
   await new Promise((r) => setTimeout(r, 1600));

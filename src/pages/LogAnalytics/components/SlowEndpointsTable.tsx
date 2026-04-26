@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
 import { Timer } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchSlowEndpoints } from "../logAnalytics.mock";
-import type { SlowEndpoint, HttpMethod } from "../logAnalytics.types";
+import { useAppSelector } from "@/store/hooks";
+import type { HttpMethod } from "../logAnalytics.types";
 
 const METHOD_CLS: Record<HttpMethod, string> = {
   GET:    "text-primary border-primary/30 bg-primary/8",
@@ -17,12 +16,7 @@ const msCls = (ms: number) =>
   ms > 1000 ? "text-red-400" : ms > 500 ? "text-amber-400" : ms > 200 ? "text-sky-400" : "text-emerald-400";
 
 const SlowEndpointsTable = () => {
-  const [data, setData]       = useState<SlowEndpoint[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchSlowEndpoints().then((d) => { setData(d); setLoading(false); });
-  }, []);
+  const { slowEndpoints: data, slowEndpointsLoading: loading } = useAppSelector((s) => s.logAnalytics);
 
   return (
     <Card className="border-border shadow-none gap-0 py-0">

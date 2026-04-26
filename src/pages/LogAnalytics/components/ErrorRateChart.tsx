@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
 import { ShieldAlert, BarChart2, TrendingUp } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import LineChart from "@/components/charts/LineChart";
-import { fetchErrorRate } from "../logAnalytics.mock";
-import type { ErrorRateData } from "../logAnalytics.types";
+import { useAppSelector } from "@/store/hooks";
 
 const KPICard = ({
   label, value, sub, icon: Icon, iconCls,
@@ -27,14 +25,9 @@ const KPICard = ({
 );
 
 const ErrorRateChart = () => {
-  const [data, setData]       = useState<ErrorRateData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { errorRate: data, errorRateLoading: loading } = useAppSelector((s) => s.logAnalytics);
 
-  useEffect(() => {
-    fetchErrorRate().then((d) => { setData(d); setLoading(false); });
-  }, []);
-
-  if (loading) {
+  if (loading || !data) {
     return (
       <div className="space-y-4">
         <div className="grid grid-cols-3 gap-4">
@@ -44,8 +37,6 @@ const ErrorRateChart = () => {
       </div>
     );
   }
-
-  if (!data) return null;
 
   return (
     <div className="space-y-4">

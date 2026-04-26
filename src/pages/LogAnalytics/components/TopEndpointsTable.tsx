@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchTopEndpoints } from "../logAnalytics.mock";
-import type { TopEndpoint, HttpMethod } from "../logAnalytics.types";
+import { useAppSelector } from "@/store/hooks";
+import type { HttpMethod } from "../logAnalytics.types";
 
 const METHOD_CLS: Record<HttpMethod, string> = {
   GET:    "text-primary border-primary/30 bg-primary/8",
@@ -19,13 +18,8 @@ const msCls = (ms: number) =>
   ms > 500 ? "text-red-400" : ms > 200 ? "text-amber-400" : "text-emerald-400";
 
 const TopEndpointsTable = () => {
-  const [data, setData]       = useState<TopEndpoint[]>([]);
-  const [loading, setLoading] = useState(true);
-  const maxCount              = Math.max(...data.map((d) => d.count), 1);
-
-  useEffect(() => {
-    fetchTopEndpoints().then((d) => { setData(d); setLoading(false); });
-  }, []);
+  const { topEndpoints: data, topEndpointsLoading: loading } = useAppSelector((s) => s.logAnalytics);
+  const maxCount = Math.max(...data.map((d) => d.count), 1);
 
   return (
     <Card className="border-border shadow-none gap-0 py-0">

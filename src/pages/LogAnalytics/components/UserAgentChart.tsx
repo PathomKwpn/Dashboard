@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
 import { Monitor, Smartphone, Bot, Terminal } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import PieChart from "@/components/charts/PieChart";
-import { fetchUserAgents } from "../logAnalytics.mock";
-import type { UserAgentRow, AgentType } from "../logAnalytics.types";
+import { useAppSelector } from "@/store/hooks";
+import type { AgentType } from "../logAnalytics.types";
 
 const TYPE_CFG: Record<AgentType, { label: string; icon: React.ElementType; cls: string }> = {
   browser: { label: "Browser", icon: Monitor,    cls: "text-primary bg-primary/10"         },
@@ -14,14 +13,9 @@ const TYPE_CFG: Record<AgentType, { label: string; icon: React.ElementType; cls:
 };
 
 const UserAgentChart = () => {
-  const [data, setData]       = useState<UserAgentRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { userAgents: data, userAgentsLoading: loading } = useAppSelector((s) => s.logAnalytics);
 
-  useEffect(() => {
-    fetchUserAgents().then((d) => { setData(d); setLoading(false); });
-  }, []);
-
-  if (loading) {
+  if (loading || data.length === 0) {
     return (
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
@@ -33,7 +27,6 @@ const UserAgentChart = () => {
     );
   }
 
-  /* Type summary */
   const typeSummary = (["browser", "mobile", "bot", "api"] as AgentType[]).map((t) => ({
     type: t,
     count: data.filter((d) => d.type === t).reduce((s, d) => s + d.count, 0),
@@ -76,7 +69,6 @@ const UserAgentChart = () => {
           </CardContent>
         </Card>
 
-        {/* Table */}
         <Card className="border-border shadow-none gap-0 py-0">
           <CardHeader className="px-5 pt-4 pb-3 border-b border-border/30 gap-0">
             <CardTitle className="text-[13px] font-590 leading-none">Top Agents</CardTitle>
