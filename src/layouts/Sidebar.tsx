@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { NAV_CONFIG } from "./sidebar/nav.config";
 import SidebarBrand from "./sidebar/SidebarBrand";
 import SidebarSection from "./sidebar/SidebarSection";
+import SidebarFooter from "./sidebar/SidebarFooter";
 
 type SidebarProps = {
   collapsed: boolean;
@@ -9,13 +11,13 @@ type SidebarProps = {
 };
 
 const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
-  const { user } = useAuth();
-  // const navigate = useNavigate();
+  const { user, isLoading, logout } = useAuth();
+  const navigate = useNavigate();
 
-  // const handleLogout = async () => {
-  //   await logout();
-  //   navigate("/login");
-  // };
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
 
   return (
     <aside
@@ -35,13 +37,13 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
           />
         ))}
       </nav>
-      {/* 
+
       <SidebarFooter
         user={user ?? null}
         collapsed={collapsed}
         isLoading={isLoading}
         onLogout={handleLogout}
-      /> */}
+      />
     </aside>
   );
 };
