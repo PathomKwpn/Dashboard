@@ -1,15 +1,12 @@
 import type { LucideIcon } from "lucide-react";
 import {
   LayoutDashboard,
-  MessageSquare,
   AlertTriangle,
   ScrollText,
   Globe,
   FileBarChart2,
   BarChart3,
   Settings,
-  Lock,
-  HelpCircle,
 } from "lucide-react";
 
 /* ─── Types ─────────────────────────────────────────────────────────────── */
@@ -35,7 +32,6 @@ export const NAV_CONFIG: NavSection[] = [
     label: "General",
     items: [
       { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
-      { label: "Messages",  to: "/messages",  icon: MessageSquare, badge: 8 },
     ],
   },
   {

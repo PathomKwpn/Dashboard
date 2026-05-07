@@ -5,6 +5,7 @@ import MainLayout from "@/layouts/MainLayout";
 import LoginPage from "@/pages/Auth/LoginPage";
 import NotFoundPage from "@/pages/NotFound/NotFoundPage";
 import ProtectedRoute from "@/components/common/ProtectedRoute";
+import { PageErrorBoundary } from "@/components/common/ErrorBoundary";
 import { routes } from "@/router/routes";
 import { useAppDispatch } from "@/store/hooks";
 import { initializeAuthThunk } from "@/pages/Auth/auth.thunks";
@@ -32,7 +33,11 @@ function AppContent() {
           }
         >
           {routes.map(({ path, element }) => (
-            <Route key={path} path={path} element={element()} />
+            <Route
+              key={path}
+              path={path}
+              element={<PageErrorBoundary>{element()}</PageErrorBoundary>}
+            />
           ))}
           {/* 404 — inside layout so sidebar/header stay visible */}
           <Route path="*" element={<NotFoundPage />} />

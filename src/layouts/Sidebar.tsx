@@ -11,7 +11,7 @@ type SidebarProps = {
 };
 
 const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
-  const { user, isLoading, logout } = useAuth();
+  const { user, logout, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
