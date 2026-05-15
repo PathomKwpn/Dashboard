@@ -1,73 +1,96 @@
-# React + TypeScript + Vite
+# Pathom Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A security log monitoring dashboard built with React and TypeScript. It visualizes log analytics, geo-based threat detection, and event anomalies with static mock data so the full product flow can be deployed without a backend.
 
-Currently, two official plugins are available:
+## Portfolio Summary
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Pathom Dashboard is a frontend case study for a security operations dashboard.
 
-## React Compiler
+Key capabilities:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Protected demo login with role-based navigation
+- Security KPI overview, severity trends, top IPs, top services, and recent alerts
+- Log explorer with search, filters, sorting, pagination, and detail drawer
+- Geo detection with world map, suspicious IPs, country breakdown, and event tables
+- Report center with summary tabs and downloadable CSV, JSON, NDJSON, or HTML exports
+- Dark/light theme support and responsive dashboard layout
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Layer | Library |
+|---|---|
+| Framework | React 19 + TypeScript |
+| State Management | Redux Toolkit |
+| Routing | React Router v7 |
+| Form & Validation | React Hook Form + Zod |
+| Charts | Apache ECharts |
+| Styling | Tailwind CSS |
+| HTTP | Axios |
+| Icons | Lucide React |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Pages
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+| Route | Description |
+|---|---|
+| `/dashboard` | Overview: log volume, severity trends, recent alerts |
+| `/log-explorer` | Search and filter raw log entries |
+| `/geo-detection` | World map of attack origins and suspicious IPs |
+| `/log-report` | Generated reports, error summaries, exports |
+| `/log-analytics` | Endpoint performance, error rates, user agents |
+| `/settings` | Theme, notifications, data retention (admin only) |
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Getting Started
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Demo Accounts
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@pathom.com | admin123 |
+| Business | user@pathom.com | password123 |
+| Developer | dev@pathom.com | dev123 |
+
+## Verification
+
+```bash
+npm run lint
+npm run build
 ```
+
+## Deployment
+
+This is a static Vite app. Recommended settings:
+
+| Platform | Build Command | Output Directory |
+|---|---|---|
+| Vercel | `npm run build` | `dist` |
+| Netlify | `npm run build` | `dist` |
+
+SPA fallback is configured through `vercel.json` and `public/_redirects`.
+
+## Project Structure
+
+```text
+src/
+├── components/       # Shared UI components and charts
+├── hooks/            # useAuth, useTheme
+├── layouts/          # Sidebar, Header, MainLayout
+├── pages/            # Feature pages with co-located slice, thunks, and types
+├── router/           # Route definitions
+├── store/            # Redux store
+└── services/         # API service layer and mock services
+```
+
+All API calls use static JSON files under `public/mock/`; no backend is required.
+
+## Limitations
+
+- Authentication and JWT refresh are simulated in the browser for portfolio/demo use.
+- Export generation is client-side and creates sample downloadable files from selected filters.
+- Mock data is static and intended to demonstrate UI, state management, and dashboard workflows.
