@@ -70,10 +70,9 @@ const DashboardPage = () => {
     dispatch(fetchRecentAlerts());
   }, [dispatch]);
 
-  const lastUpdated = useMemo(() => {
-    if (!summary?.last_updated) return "-";
-    return moment(summary.last_updated).format("YYYY-MM-DD HH:mm");
-  }, [summary?.last_updated]);
+  const lastUpdated = summary?.last_updated
+    ? moment(summary.last_updated).format("YYYY-MM-DD HH:mm")
+    : "-";
 
   const timeAxis = useMemo(
     () => timeSeries.map((item) => moment(item.detect_time).format("HH:mm")),
@@ -123,7 +122,9 @@ const DashboardPage = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-50" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
               </span>
-              <span className="text-xs font-medium text-muted-foreground">Live</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                Live
+              </span>
             </div>
 
             <div className="w-px h-5 bg-border" />

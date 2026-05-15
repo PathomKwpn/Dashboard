@@ -10,7 +10,6 @@ import {
   Shield,
   BarChart3,
   Bell,
-  Lock,
   AlertCircle,
   CheckCircle2,
 } from "lucide-react";
@@ -75,6 +74,12 @@ const LoginPage = () => {
   const { login, isLoading, error, isAuthenticated, resetError } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
+  const [forgotSent, setForgotSent] = useState(false);
+
+  const handleForgotPassword = () => {
+    setForgotSent(true);
+    setTimeout(() => setForgotSent(false), 4000);
+  };
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -237,31 +242,6 @@ const LoginPage = () => {
               </div>
             ))}
           </div>
-
-          {/* Stats row */}
-          <div className="flex gap-8 pt-2">
-            {[
-              { value: "99.9%", label: "Uptime" },
-              { value: "< 50ms", label: "Response" },
-              { value: "256-bit", label: "Encryption" },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <p
-                  className="text-lg tabular-nums"
-                  style={{
-                    color: "#f7f8f8",
-                    fontVariationSettings: '"wght" 590',
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  {stat.value}
-                </p>
-                <p className="text-xs mt-0.5" style={{ color: "#62666d" }}>
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Footer */}
@@ -269,8 +249,7 @@ const LoginPage = () => {
           className="relative z-10 flex items-center gap-2 text-xs"
           style={{ color: "#62666d" }}
         >
-          <Lock className="h-3 w-3" />
-          <span>Secured with end-to-end encryption</span>
+          <span>Pathom Dashboard</span>
         </div>
       </div>
 
@@ -365,6 +344,7 @@ const LoginPage = () => {
                         variant="link"
                         size="sm"
                         className="h-auto p-0 text-xs"
+                        onClick={handleForgotPassword}
                       >
                         Forgot password?
                       </Button>
@@ -400,6 +380,15 @@ const LoginPage = () => {
                   </FormItem>
                 )}
               />
+
+              {forgotSent && (
+                <div className="flex items-center gap-2 rounded-lg border border-sky-500/20 bg-sky-500/8 px-3 py-2.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-sky-500 shrink-0" />
+                  <p className="text-xs text-sky-600 dark:text-sky-400">
+                    Password reset link sent — check your email
+                  </p>
+                </div>
+              )}
 
               <FormField
                 control={form.control}

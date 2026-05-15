@@ -43,9 +43,9 @@ const SettingsPage = () => {
   const { theme, toggleTheme } = useTheme();
 
   const [displayName, setDisplayName] = useState(user?.name ?? "");
-  const [notifyAlerts,  setNotifyAlerts]  = useState(true);
+  const [notifyAlerts, setNotifyAlerts] = useState(true);
   const [notifyReports, setNotifyReports] = useState(false);
-  const [notifySystem,  setNotifySystem]  = useState(true);
+  const [notifySystem, setNotifySystem] = useState(true);
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
@@ -57,7 +57,9 @@ const SettingsPage = () => {
     <div className="min-h-full bg-background">
       <div className="border-b border-border/40">
         <div className="max-w-3xl mx-auto px-6 py-5">
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">Settings</h1>
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">
+            Settings
+          </h1>
           <p className="text-sm text-muted-foreground mt-0.5">
             Manage your account preferences and system configuration
           </p>
@@ -101,7 +103,9 @@ const SettingsPage = () => {
               </div>
             </div>
             <div className="space-y-1.5">
-              <label className="text-[11px] font-medium text-muted-foreground">Email</label>
+              <label className="text-[11px] font-medium text-muted-foreground">
+                Email
+              </label>
               <Input
                 value={user?.email ?? ""}
                 readOnly
@@ -130,9 +134,12 @@ const SettingsPage = () => {
           <CardContent className="px-5 py-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[12px] font-medium text-foreground">Dark Mode</p>
+                <p className="text-[12px] font-medium text-foreground">
+                  Dark Mode
+                </p>
                 <p className="text-[11px] text-muted-foreground/70 mt-0.5">
-                  Currently using <span className="font-medium">{theme}</span> theme
+                  Currently using <span className="font-medium">{theme}</span>{" "}
+                  theme
                 </p>
               </div>
               <Toggle checked={theme === "dark"} onChange={toggleTheme} />
@@ -145,7 +152,9 @@ const SettingsPage = () => {
           <CardHeader className="gap-0 px-5 pt-5 pb-3 border-b border-border/30">
             <div className="flex items-center gap-2">
               <Bell className="h-4 w-4 text-muted-foreground" />
-              <CardTitle className="text-[13px] font-590">Notifications</CardTitle>
+              <CardTitle className="text-[13px] font-590">
+                Notifications
+              </CardTitle>
             </div>
             <CardDescription className="text-[11px] mt-0.5 ml-6">
               Configure alert and report notifications
@@ -154,14 +163,33 @@ const SettingsPage = () => {
 
           <CardContent className="px-5 py-5 space-y-4">
             {[
-              { label: "Security Alerts",  desc: "Critical and high-risk events",       value: notifyAlerts,   set: setNotifyAlerts   },
-              { label: "Report Ready",     desc: "When a scheduled report is ready",    value: notifyReports,  set: setNotifyReports  },
-              { label: "System Messages",  desc: "Maintenance and system updates",      value: notifySystem,   set: setNotifySystem   },
+              {
+                label: "Security Alerts",
+                desc: "Critical and high-risk events",
+                value: notifyAlerts,
+                set: setNotifyAlerts,
+              },
+              {
+                label: "Report Ready",
+                desc: "When a scheduled report is ready",
+                value: notifyReports,
+                set: setNotifyReports,
+              },
+              {
+                label: "System Messages",
+                desc: "Maintenance and system updates",
+                value: notifySystem,
+                set: setNotifySystem,
+              },
             ].map(({ label, desc, value, set }) => (
               <div key={label} className="flex items-center justify-between">
                 <div>
-                  <p className="text-[12px] font-medium text-foreground">{label}</p>
-                  <p className="text-[11px] text-muted-foreground/70 mt-0.5">{desc}</p>
+                  <p className="text-[12px] font-medium text-foreground">
+                    {label}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground/70 mt-0.5">
+                    {desc}
+                  </p>
                 </div>
                 <Toggle checked={value} onChange={set} />
               </div>
@@ -174,7 +202,9 @@ const SettingsPage = () => {
           <CardHeader className="gap-0 px-5 pt-5 pb-3 border-b border-border/30">
             <div className="flex items-center gap-2">
               <Database className="h-4 w-4 text-muted-foreground" />
-              <CardTitle className="text-[13px] font-590">Data & Storage</CardTitle>
+              <CardTitle className="text-[13px] font-590">
+                Data & Storage
+              </CardTitle>
             </div>
             <CardDescription className="text-[11px] mt-0.5 ml-6">
               Log retention and data export settings
@@ -194,12 +224,6 @@ const SettingsPage = () => {
                 max={365}
               />
             </div>
-            <div className="pt-1">
-              <Button variant="outline" size="sm" className="text-[12px]">
-                <Shield className="h-3.5 w-3.5 mr-1.5" />
-                Export My Data
-              </Button>
-            </div>
           </CardContent>
         </Card>
 
@@ -208,7 +232,11 @@ const SettingsPage = () => {
           <Button variant="ghost" size="sm" className="text-[12px]">
             Reset to defaults
           </Button>
-          <Button size="sm" className="text-[12px] min-w-20" onClick={handleSave}>
+          <Button
+            size="sm"
+            className="text-[12px] min-w-20"
+            onClick={handleSave}
+          >
             {saved ? "Saved!" : "Save changes"}
           </Button>
         </div>

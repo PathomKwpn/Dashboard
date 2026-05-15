@@ -1,7 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import {
   LayoutDashboard,
-  AlertTriangle,
   ScrollText,
   Globe,
   FileBarChart2,

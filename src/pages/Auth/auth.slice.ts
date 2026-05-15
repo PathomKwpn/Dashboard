@@ -78,10 +78,10 @@ const authSlice = createSlice({
       .addCase(logoutThunk.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(logoutThunk.fulfilled, (state) => {
+      .addCase(logoutThunk.fulfilled, () => {
         return { ...initialState, isInitialized: true };
       })
-      .addCase(logoutThunk.rejected, (state) => {
+      .addCase(logoutThunk.rejected, () => {
         // Force logout even on error
         return { ...initialState, isInitialized: true };
       });
@@ -91,7 +91,7 @@ const authSlice = createSlice({
       .addCase(refreshAccessTokenThunk.fulfilled, (state, action) => {
         state.accessToken = action.payload.accessToken;
       })
-      .addCase(refreshAccessTokenThunk.rejected, (state) => {
+      .addCase(refreshAccessTokenThunk.rejected, () => {
         return { ...initialState, isInitialized: true };
       });
   },
