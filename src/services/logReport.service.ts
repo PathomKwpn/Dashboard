@@ -18,9 +18,23 @@ export const getErrorSummary    = async () => (await axios.get(LOG_REPORTS_ERROR
 export const getTrafficSummary  = async () => (await axios.get(LOG_REPORTS_TRAFFIC_SUMMARY_API)).data  as TrafficSummaryData;
 export const getLogDistribution = async () => (await axios.get(LOG_REPORTS_DISTRIBUTION_API)).data     as LogDistributionData;
 
-export const triggerExport = async (_config: ExportConfig): Promise<{ job_id: string; filename: string }> => {
+export const triggerExport = async (config: ExportConfig): Promise<{ job_id: string; filename: string }> => {
   await new Promise((r) => setTimeout(r, 1600));
-  return { job_id: `export-${Date.now()}`, filename: `logs-export-${new Date().toISOString().slice(0, 10)}` };
+  const serviceScope = config.services.length > 0
+    ? config.services.join("-")
+    : "all-services";
+  const severityScope = config.severities.length > 0
+    ? config.severities.join("-")
+    : "all-severities";
+  const safeScope = `${serviceScope}-${severityScope}`
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+  return {
+    job_id: `export-${Date.now()}`,
+    filename: `logs-${config.date_from}-to-${config.date_to}-${safeScope}-${config.max_rows}-rows`,
+  };
 };
 
 export const downloadReportFile = async (reportId: string): Promise<void> => {
