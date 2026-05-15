@@ -1,6 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
-import worldGeoJson from "@/assets/world.json";
 import type { AttackOrigin } from "@/pages/GeoDetection/geoDetection.types";
 
 /* ─── Constants ──────────────────────────────────────────────────────────── */
@@ -11,9 +10,24 @@ const THREAT_COLORS: Record<string, string> = {
   low:      "#6b7280",
 };
 
-/* Register the pre-processed world GeoJSON once at module level */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-echarts.registerMap("world", worldGeoJson as any);
+let worldMapRegistration: Promise<void> | null = null;
+
+const registerWorldMap = () => {
+  worldMapRegistration ??= fetch("/map/world.geo.json")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to load world map: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((geoJson) => {
+      // ECharts accepts GeoJSON here, but its type definition is narrower.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      echarts.registerMap("world", geoJson as any);
+    });
+
+  return worldMapRegistration;
+};
 
 /* ─── Props ──────────────────────────────────────────────────────────────── */
 interface GeoMapChartProps {
@@ -25,23 +39,32 @@ interface GeoMapChartProps {
 const GeoMapChart = ({ data, height = "420px" }: GeoMapChartProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef     = useRef<echarts.ECharts | null>(null);
+  const [chartReady, setChartReady] = useState(false);
 
   /* ── Init chart ── */
   useEffect(() => {
-    if (!containerRef.current) return;
+    let ro: ResizeObserver | null = null;
+    let disposed = false;
 
-    const chart = echarts.init(containerRef.current, null, {
-      renderer:         "canvas",
-      devicePixelRatio: window.devicePixelRatio ?? 1,
+    registerWorldMap().then(() => {
+      if (disposed || !containerRef.current) return;
+
+      const chart = echarts.init(containerRef.current, null, {
+        renderer:         "canvas",
+        devicePixelRatio: window.devicePixelRatio ?? 1,
+      });
+      chartRef.current = chart;
+      setChartReady(true);
+
+      ro = new ResizeObserver(() => chart.resize());
+      ro.observe(containerRef.current);
     });
-    chartRef.current = chart;
-
-    const ro = new ResizeObserver(() => chart.resize());
-    ro.observe(containerRef.current);
 
     return () => {
-      ro.disconnect();
-      chart.dispose();
+      disposed = true;
+      setChartReady(false);
+      ro?.disconnect();
+      chartRef.current?.dispose();
       chartRef.current = null;
     };
   }, []);
@@ -49,7 +72,7 @@ const GeoMapChart = ({ data, height = "420px" }: GeoMapChartProps) => {
   /* ── Update option when data changes ── */
   useEffect(() => {
     const chart = chartRef.current;
-    if (!chart) return;
+    if (!chartReady || !chart) return;
 
     const maxCount = Math.max(...data.map((d) => d.attack_count), 1);
 
@@ -183,7 +206,7 @@ const GeoMapChart = ({ data, height = "420px" }: GeoMapChartProps) => {
       },
       true,
     );
-  }, [data]);
+  }, [chartReady, data]);
 
   return (
     <div

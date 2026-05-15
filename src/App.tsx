@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import MainLayout from "@/layouts/MainLayout";
@@ -9,6 +9,15 @@ import { PageErrorBoundary } from "@/components/common/ErrorBoundary";
 import { routes } from "@/router/routes";
 import { useAppDispatch } from "@/store/hooks";
 import { initializeAuthThunk } from "@/pages/Auth/auth.thunks";
+
+const PageLoader = () => (
+  <div className="min-h-[50vh] flex items-center justify-center bg-background">
+    <div className="flex flex-col items-center gap-3">
+      <div className="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+      <p className="text-xs text-muted-foreground">Loading page...</p>
+    </div>
+  </div>
+);
 
 function AppContent() {
   const dispatch = useAppDispatch();
@@ -32,11 +41,17 @@ function AppContent() {
             </ProtectedRoute>
           }
         >
-          {routes.map(({ path, element }) => (
+          {routes.map(({ path, component: Component }) => (
             <Route
               key={path}
               path={path}
-              element={<PageErrorBoundary>{element()}</PageErrorBoundary>}
+              element={
+                <PageErrorBoundary>
+                  <Suspense fallback={<PageLoader />}>
+                    <Component />
+                  </Suspense>
+                </PageErrorBoundary>
+              }
             />
           ))}
           {/* 404 — inside layout so sidebar/header stay visible */}

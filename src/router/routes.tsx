@@ -1,13 +1,17 @@
-import DashboardPage from "@/pages/Dashboard/DashboardPage";
-import LogExplorerPage from "@/pages/LogExplorer/LogExplorerPage";
-import GeoDetectionPage from "@/pages/GeoDetection/GeoDetectionPage";
-import LogReportPage from "@/pages/LogReport/LogReportPage";
-import LogAnalyticsPage from "@/pages/LogAnalytics/LogAnalyticsPage";
+import { lazy } from "react";
+
+const DashboardPage = lazy(() => import("@/pages/Dashboard/DashboardPage"));
+const LogExplorerPage = lazy(() => import("@/pages/LogExplorer/LogExplorerPage"));
+const GeoDetectionPage = lazy(() => import("@/pages/GeoDetection/GeoDetectionPage"));
+const LogReportPage = lazy(() => import("@/pages/LogReport/LogReportPage"));
+const LogAnalyticsPage = lazy(() => import("@/pages/LogAnalytics/LogAnalyticsPage"));
+const SettingsPage = lazy(() => import("@/pages/Settings/SettingsPage"));
 
 export const routes = [
-  { path: "/dashboard", element: DashboardPage },
-  { path: "/log-explorer", element: LogExplorerPage },
-  { path: "/geo-detection", element: GeoDetectionPage },
-  { path: "/log-report", element: LogReportPage },
-  { path: "/log-analytics", element: LogAnalyticsPage },
+  { path: "/dashboard", component: DashboardPage },
+  { path: "/log-explorer", component: LogExplorerPage },
+  { path: "/geo-detection", component: GeoDetectionPage },
+  { path: "/log-report", component: LogReportPage },
+  { path: "/log-analytics", component: LogAnalyticsPage },
+  { path: "/settings", component: SettingsPage },
 ];
