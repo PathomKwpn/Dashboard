@@ -1,10 +1,14 @@
 # Pathom Dashboard
 
-A security log monitoring dashboard built with React and TypeScript. It visualizes log analytics, geo-based threat detection, and event anomalies with static mock data so the full product flow can be deployed without a backend.
+A frontend dashboard project built with React and TypeScript. It focuses on security log monitoring, log analytics, geo-based threat detection, and reporting workflows.
 
 ## Portfolio Summary
 
-Pathom Dashboard is a frontend case study for a security operations dashboard.
+Pathom Dashboard is a frontend-only portfolio project based on the idea of a security operations dashboard.
+
+There is no real backend in this project. Instead of calling a live API, the app fetches prepared JSON files from `public/mock/` to simulate API responses. That setup makes it easy to show the full product flow, UI states, charts, tables, and interactions without needing a server or database.
+
+The main goal of the project is to show frontend architecture, state management, routing, data visualization, and dashboard UX in a realistic product-style interface.
 
 Key capabilities:
 
@@ -78,19 +82,19 @@ SPA fallback is configured through `vercel.json` and `public/_redirects`.
 
 ```text
 src/
-├── components/       # Shared UI components and charts
-├── hooks/            # useAuth, useTheme
-├── layouts/          # Sidebar, Header, MainLayout
-├── pages/            # Feature pages with co-located slice, thunks, and types
-├── router/           # Route definitions
-├── store/            # Redux store
-└── services/         # API service layer and mock services
+|-- components/       # Shared UI components and charts
+|-- hooks/            # useAuth, useTheme
+|-- layouts/          # Sidebar, Header, MainLayout
+|-- pages/            # Feature pages with co-located slice, thunks, and types
+|-- router/           # Route definitions
+|-- store/            # Redux store
+`-- services/         # API service layer and mock services
 ```
 
-All API calls use static JSON files under `public/mock/`; no backend is required.
+This project does not use a real backend. Data is loaded by fetching static JSON files from `public/mock/`, so the API layer is mocked on the frontend side.
 
 ## Limitations
 
-- Authentication and JWT refresh are simulated in the browser for portfolio/demo use.
-- Export generation is client-side and creates sample downloadable files from selected filters.
-- Mock data is static and intended to demonstrate UI, state management, and dashboard workflows.
+- Authentication and JWT refresh are simulated in the browser for demo purposes.
+- Export generation is handled on the client and creates sample downloadable files from the selected filters.
+- Mock data is static and is mainly there to demonstrate the frontend experience, state flow, and dashboard features.
