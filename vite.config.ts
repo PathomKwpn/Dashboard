@@ -18,7 +18,6 @@ export default defineConfig({
           react: ["react", "react-dom", "react-router", "react-router-dom"],
           redux: ["@reduxjs/toolkit", "react-redux"],
           charts: ["echarts"],
-          maps: ["react-simple-maps"],
           ui: ["radix-ui", "lucide-react", "class-variance-authority"],
           forms: ["react-hook-form", "@hookform/resolvers", "zod"],
         },

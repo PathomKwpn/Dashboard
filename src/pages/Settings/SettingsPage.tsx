@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ROLE_LABELS } from "@/layouts/sidebar/nav.config";
-import { Sun, Moon, Bell, User, Shield, Database } from "lucide-react";
+import { Sun, Moon, Bell, User, Database } from "lucide-react";
 
 /* ─── Toggle switch ─────────────────────────────────────────────────────── */
 const Toggle = ({
